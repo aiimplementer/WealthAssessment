@@ -1,219 +1,259 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Portfolio Report Generator</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8" />
+<title>Portfolio Report Generator</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <style>
-    body {
-      margin: 0;
-      font-family: "Segoe UI", Roboto, Arial, sans-serif;
-      background: #f4f6f9;
-      color: #1f2937;
-    }
+<style>
+:root{
+  --bg-dark: #060b1a;
+  --bg-mid: #0b1228;
+  --card-bg: rgba(255,255,255,0.06);
+  --border: rgba(255,255,255,0.12);
+  --accent: #27e5ff;
+  --text-main: #e5e7eb;
+  --text-muted: #9ca3af;
+}
 
-    .container {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 40px 20px;
-    }
+*{ box-sizing: border-box; }
 
-    /* Header */
-    .hero {
-      background: linear-gradient(135deg, #0f766e, #0d9488);
-      color: white;
-      border-radius: 14px;
-      padding: 50px 40px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-    }
+body{
+  margin:0;
+  font-family: "Segoe UI", Roboto, Arial, sans-serif;
+  background: radial-gradient(circle at top, #0f172a, #020617);
+  color: var(--text-main);
+}
 
-    .hero h1 {
-      margin: 0 0 15px;
-      font-size: 32px;
-      font-weight: 600;
-    }
+/* ===== HEADER ===== */
+header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:18px 40px;
+  border-bottom:1px solid var(--border);
+}
 
-    .hero p {
-      font-size: 17px;
-      opacity: 0.95;
-      max-width: 700px;
-      line-height: 1.6;
-    }
+.logo{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
 
-    /* Card */
-    .card {
-      background: white;
-      border-radius: 12px;
-      padding: 35px;
-      margin-top: 35px;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
-    }
+.logo img{
+  height:36px;
+}
 
-    .card h2 {
-      margin-top: 0;
-      font-size: 24px;
-      color: #0f766e;
-    }
+.logo span{
+  font-weight:700;
+  letter-spacing:1px;
+  color:var(--accent);
+}
 
-    .features {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 18px;
-      margin: 25px 0 35px;
-    }
+/* ===== HERO ===== */
+.hero{
+  text-align:center;
+  padding:90px 20px 60px;
+}
 
-    .feature {
-      background: #f9fafb;
-      border-radius: 10px;
-      padding: 18px;
-      border-left: 4px solid #0d9488;
-    }
+.hero h1{
+  font-size:38px;
+  margin-bottom:18px;
+  color:var(--accent);
+}
 
-    .feature strong {
-      display: block;
-      margin-bottom: 6px;
-      color: #065f46;
-    }
+.hero p{
+  max-width:720px;
+  margin:0 auto;
+  font-size:17px;
+  line-height:1.6;
+  color:var(--text-muted);
+}
 
-    /* Button */
-    .cta {
-      text-align: center;
-      margin-top: 20px;
-    }
+/* ===== CARDS ===== */
+.section{
+  max-width:1100px;
+  margin:0 auto;
+  padding:60px 20px;
+}
 
-    button {
-      background: #0d9488;
-      color: white;
-      border: none;
-      padding: 16px 36px;
-      font-size: 16px;
-      border-radius: 10px;
-      cursor: pointer;
-      font-weight: 600;
-      transition: all 0.25s ease;
-      box-shadow: 0 6px 14px rgba(13,148,136,0.35);
-    }
+.cards{
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px,1fr));
+  gap:26px;
+}
 
-    button:hover {
-      background: #0f766e;
-      transform: translateY(-1px);
-    }
+.card{
+  background: var(--card-bg);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:28px;
+  backdrop-filter: blur(12px);
+}
 
-    button:disabled {
-      background: #9ca3af;
-      cursor: not-allowed;
-      box-shadow: none;
-    }
+.card h3{
+  margin-top:0;
+  color:var(--accent);
+  font-size:20px;
+}
 
-    /* Status */
-    .status {
-      margin-top: 20px;
-      text-align: center;
-      font-size: 15px;
-      min-height: 22px;
-    }
+.card ul{
+  padding-left:18px;
+  margin:12px 0 0;
+}
 
-    .success {
-      color: #047857;
-    }
+.card li{
+  margin-bottom:8px;
+  color:var(--text-muted);
+}
 
-    .error {
-      color: #b91c1c;
-    }
+/* ===== CTA ===== */
+.cta{
+  text-align:center;
+  margin-top:60px;
+}
 
-    /* Footer */
-    footer {
-      text-align: center;
-      margin-top: 40px;
-      font-size: 13px;
-      color: #6b7280;
-    }
-  </style>
+button{
+  background: linear-gradient(135deg, #22d3ee, #0ea5e9);
+  border:none;
+  color:#020617;
+  padding:16px 42px;
+  font-size:16px;
+  font-weight:700;
+  border-radius:12px;
+  cursor:pointer;
+  box-shadow:0 0 30px rgba(39,229,255,0.35);
+  transition:all .25s ease;
+}
+
+button:hover{
+  transform: translateY(-2px);
+  box-shadow:0 0 45px rgba(39,229,255,0.6);
+}
+
+button:disabled{
+  opacity:0.6;
+  cursor:not-allowed;
+}
+
+.status{
+  margin-top:18px;
+  font-size:14px;
+  min-height:20px;
+}
+
+.success{ color:#22c55e; }
+.error{ color:#ef4444; }
+
+/* ===== FOOTER ===== */
+footer{
+  border-top:1px solid var(--border);
+  padding:24px 20px;
+  text-align:center;
+  font-size:13px;
+  color:var(--text-muted);
+}
+
+footer a{
+  color:var(--accent);
+  text-decoration:none;
+}
+
+footer a:hover{
+  text-decoration:underline;
+}
+</style>
 </head>
 
 <body>
-  <div class="container">
 
-    <div class="hero">
-      <h1>Portfolio Report Generator</h1>
-      <p>
-        Generate a clean, investor-ready portfolio report with asset allocation,
-        performance insights, XIRR summary, and rebalancing recommendations —
-        all in one click.
-      </p>
+<header>
+  <div class="logo">
+    <img src="https://ai-implementer.netlify.app/favicon.png" 
+         alt="AI Implementer Logo"
+         onerror="this.style.display='none'">
+    <span>AI-IMPLEMENTER</span>
+  </div>
+</header>
+
+<section class="hero">
+  <h1>Portfolio Report Generator</h1>
+  <p>
+    One-click generation of investor-ready portfolio reports —
+    asset allocation, XIRR performance, profit & loss highlights,
+    and rebalancing insights.
+  </p>
+</section>
+
+<section class="section">
+  <div class="cards">
+    <div class="card">
+      <h3>Asset Allocation</h3>
+      <ul>
+        <li>Equity, Debt, Hybrid & Commodities</li>
+        <li>Clean classification & totals</li>
+        <li>Investor-friendly structure</li>
+      </ul>
     </div>
 
     <div class="card">
-      <h2>What this report includes</h2>
-
-      <div class="features">
-        <div class="feature">
-          <strong>Asset Allocation</strong>
-          Equity, Debt, Commodities, Hybrid & Cash — clearly structured.
-        </div>
-        <div class="feature">
-          <strong>Performance Metrics</strong>
-          XIRR-based returns with profit/loss clearly highlighted.
-        </div>
-        <div class="feature">
-          <strong>Rebalancing Insights</strong>
-          Actionable guidance aligned with target allocation.
-        </div>
-        <div class="feature">
-          <strong>Print-Friendly PDF</strong>
-          Clean tables, readable layout, investor-safe formatting.
-        </div>
-      </div>
-
-      <div class="cta">
-        <button id="generateBtn" onclick="generateReport()">
-          Generate Portfolio Report
-        </button>
-      </div>
-
-      <div id="status" class="status"></div>
+      <h3>Performance Metrics</h3>
+      <ul>
+        <li>XIRR-based returns</li>
+        <li>Profit & loss clarity</li>
+        <li>Time-weighted insights</li>
+      </ul>
     </div>
 
-    <footer>
-      © Portfolio Analytics Engine • Automated via n8n
-    </footer>
-
+    <div class="card">
+      <h3>Rebalancing Insights</h3>
+      <ul>
+        <li>Target vs current allocation</li>
+        <li>Actionable adjustment guidance</li>
+        <li>Risk-aligned suggestions</li>
+      </ul>
+    </div>
   </div>
 
-  <script>
-    const webhookUrl = "https://unsparse-sherman-nonfallaciously.ngrok-free.dev/webhook/f76f05ac-4cbb-43a2-a703-b1955512130f";
+  <div class="cta">
+    <button id="generateBtn" onclick="generateReport()">
+      Generate Portfolio Report
+    </button>
+    <div id="status" class="status"></div>
+  </div>
+</section>
 
-    async function generateReport() {
-      const btn = document.getElementById("generateBtn");
-      const status = document.getElementById("status");
+<footer>
+  Powered by <a href="https://ai-implementer.netlify.app/" target="_blank">AI-Implementer</a>
+</footer>
 
-      btn.disabled = true;
-      btn.innerText = "Generating Report...";
-      status.innerText = "Please wait while your portfolio report is being generated...";
-      status.className = "status";
+<script>
+const webhookUrl =
+"https://unsparse-sherman-nonfallaciously.ngrok-free.dev/webhook/f76f05ac-4cbb-43a2-a703-b1955512130f";
 
-      try {
-        const response = await fetch(webhookUrl, {
-          method: "POST"
-        });
+async function generateReport(){
+  const btn=document.getElementById("generateBtn");
+  const status=document.getElementById("status");
 
-        if (!response.ok) {
-          throw new Error("Webhook call failed");
-        }
+  btn.disabled=true;
+  btn.innerText="Generating…";
+  status.textContent="Triggering portfolio report generation…";
+  status.className="status";
 
-        status.innerText =
-          "Portfolio report generation triggered successfully. You will receive the report shortly.";
-        status.classList.add("success");
-      } catch (err) {
-        status.innerText =
-          "Something went wrong while triggering the report. Please try again.";
-        status.classList.add("error");
-      } finally {
-        btn.disabled = false;
-        btn.innerText = "Generate Portfolio Report";
-      }
-    }
-  </script>
+  try{
+    const res=await fetch(webhookUrl,{method:"POST"});
+    if(!res.ok) throw new Error();
+    status.textContent="Portfolio report triggered successfully.";
+    status.classList.add("success");
+  }catch(e){
+    status.textContent="Failed to trigger report. Please retry.";
+    status.classList.add("error");
+  }finally{
+    btn.disabled=false;
+    btn.innerText="Generate Portfolio Report";
+  }
+}
+</script>
+
 </body>
 </html>
