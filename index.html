@@ -7,22 +7,22 @@
 
 <style>
 :root{
-  --bg-dark: #060b1a;
-  --bg-mid: #0b1228;
-  --card-bg: rgba(255,255,255,0.06);
-  --border: rgba(255,255,255,0.12);
-  --accent: #27e5ff;
-  --text-main: #e5e7eb;
-  --text-muted: #9ca3af;
+  --bg-dark:#060b1a;
+  --bg-mid:#0b1228;
+  --card-bg:rgba(255,255,255,0.06);
+  --border:rgba(255,255,255,0.12);
+  --accent:#27e5ff;
+  --text-main:#e5e7eb;
+  --text-muted:#9ca3af;
 }
 
-*{ box-sizing: border-box; }
+*{box-sizing:border-box}
 
 body{
   margin:0;
-  font-family: "Segoe UI", Roboto, Arial, sans-serif;
-  background: radial-gradient(circle at top, #0f172a, #020617);
-  color: var(--text-main);
+  font-family:"Segoe UI",Roboto,Arial,sans-serif;
+  background:radial-gradient(circle at top,#0f172a,#020617);
+  color:var(--text-main);
 }
 
 /* ===== HEADER ===== */
@@ -34,21 +34,7 @@ header{
   border-bottom:1px solid var(--border);
 }
 
-.logo{
-  display:flex;
-  align-items:center;
-  gap:12px;
-}
-
-.logo img{
-  height:36px;
-}
-
-.logo span{
-  font-weight:700;
-  letter-spacing:1px;
-  color:var(--accent);
-}
+.logo img{height:36px}
 
 /* ===== HERO ===== */
 .hero{
@@ -79,16 +65,16 @@ header{
 
 .cards{
   display:grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px,1fr));
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
   gap:26px;
 }
 
 .card{
-  background: var(--card-bg);
+  background:var(--card-bg);
   border:1px solid var(--border);
   border-radius:18px;
   padding:28px;
-  backdrop-filter: blur(12px);
+  backdrop-filter:blur(12px);
 }
 
 .card h3{
@@ -114,7 +100,7 @@ header{
 }
 
 button{
-  background: linear-gradient(135deg, #22d3ee, #0ea5e9);
+  background:linear-gradient(135deg,#22d3ee,#0ea5e9);
   border:none;
   color:#020617;
   padding:16px 42px;
@@ -127,23 +113,23 @@ button{
 }
 
 button:hover{
-  transform: translateY(-2px);
+  transform:translateY(-2px);
   box-shadow:0 0 45px rgba(39,229,255,0.6);
 }
 
 button:disabled{
-  opacity:0.6;
+  opacity:.6;
   cursor:not-allowed;
 }
 
 .status{
   margin-top:18px;
   font-size:14px;
-  min-height:20px;
+  min-height:22px;
 }
 
-.success{ color:#22c55e; }
-.error{ color:#ef4444; }
+.success{color:#22c55e}
+.error{color:#ef4444}
 
 /* ===== FOOTER ===== */
 footer{
@@ -158,10 +144,6 @@ footer a{
   color:var(--accent);
   text-decoration:none;
 }
-
-footer a:hover{
-  text-decoration:underline;
-}
 </style>
 </head>
 
@@ -169,8 +151,8 @@ footer a:hover{
 
 <header>
   <div class="logo">
-    <img src="https://ai-implementer.netlify.app/images/ai-implementer-logo.png" 
-         alt="AI Implementer Logo"
+    <img src="https://ai-implementer.netlify.app/images/ai-implementer-logo.png"
+         alt="AI Implementer"
          onerror="this.style.display='none'">
   </div>
 </header>
@@ -231,73 +213,43 @@ const webhookUrl =
 "https://unsparse-sherman-nonfallaciously.ngrok-free.dev/webhook/dbf905eb-2008-400c-a3a3-3c6ebf81cf3f";
 
 async function generateReport(){
-  const btn=document.getElementById("generateBtn");
-  const status=document.getElementById("status");
+  const btn = document.getElementById("generateBtn");
+  const status = document.getElementById("status");
 
-  btn.disabled=true;
-  btn.innerText="Generating…";
-  status.textContent="Triggering portfolio report generation…";
-  status.className="status";
+  btn.disabled = true;
+  btn.innerText = "Starting…";
+  status.className = "status";
+  status.textContent = "Starting portfolio report generation…";
 
   try {
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 15000); // 15s timeout
+    /**
+     * IMPORTANT:
+     * We do NOT wait for workflow completion.
+     * n8n should respond immediately (Respond Immediately / Always Respond).
+     */
+    await fetch(webhookUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        source: "portfolio-ui",
+        requestedAt: new Date().toISOString()
+      })
+    });
 
-  const res = await fetch(webhookUrl, {
-    method: "POST",
-    signal: controller.signal
-  });
+    status.textContent =
+      "✅ Report generation started successfully. This may take a few minutes. You can safely close this page.";
+    status.classList.add("success");
 
-  clearTimeout(timeoutId);
-
-  if (!res.ok) {
-    // Handle known HTTP errors
-    if (res.status === 400) {
-      throw new Error("BAD_REQUEST");
-    }
-    if (res.status === 401 || res.status === 403) {
-      throw new Error("UNAUTHORIZED");
-    }
-    if (res.status === 404) {
-      throw new Error("NOT_FOUND");
-    }
-    if (res.status >= 500) {
-      throw new Error("SERVER_ERROR");
-    }
-
-    throw new Error("HTTP_ERROR");
+  } catch (e) {
+    status.textContent =
+      "❌ Unable to reach the service. Please check your connection or try again later.";
+    status.classList.add("error");
+  } finally {
+    setTimeout(() => {
+      btn.disabled = false;
+      btn.innerText = "Generate Portfolio Report";
+    }, 3000);
   }
-
-  status.textContent =
-    "Portfolio report generation has been successfully initiated.";
-  status.classList.add("success");
-
-} catch (e) {
-
-  let message = "Something went wrong. Please try again.";
-
-  if (e.name === "AbortError") {
-    message = "Request timed out. The report is taking longer than expected.";
-  } else if (e.message === "BAD_REQUEST") {
-    message = "Invalid request. Please refresh the page and retry.";
-  } else if (e.message === "UNAUTHORIZED") {
-    message = "Authorization error. Please contact support.";
-  } else if (e.message === "NOT_FOUND") {
-    message = "Service endpoint not found. Please try later.";
-  } else if (e.message === "SERVER_ERROR") {
-    message = "Server is currently busy. Please retry shortly.";
-  } else if (e instanceof TypeError) {
-    message = "Network error. Please check your internet connection.";
-  }
-
-  status.textContent = message;
-  status.classList.add("error");
-
-} finally {
-  btn.disabled = false;
-  btn.innerText = "Generate Portfolio Report";
-}
-
 }
 </script>
 
