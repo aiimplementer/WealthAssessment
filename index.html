@@ -39,7 +39,7 @@ header{
 /* ===== HERO ===== */
 .hero{
   text-align:center;
-  padding:0px 10px 10px;
+  padding:0 10px 10px;
 }
 
 .hero h1{
@@ -56,11 +56,11 @@ header{
   color:var(--text-muted);
 }
 
-/* ===== CARDS ===== */
+/* ===== CONTENT ===== */
 .section{
   max-width:1100px;
   margin:0 auto;
-  padding:20px 20px;
+  padding:20px;
 }
 
 .cards{
@@ -74,23 +74,11 @@ header{
   border:1px solid var(--border);
   border-radius:18px;
   padding:12px;
-  backdrop-filter:blur(12px);
 }
 
 .card h3{
   margin-top:0;
   color:var(--accent);
-  font-size:20px;
-}
-
-.card ul{
-  padding-left:18px;
-  margin:12px 0 0;
-}
-
-.card li{
-  margin-bottom:8px;
-  color:var(--text-muted);
 }
 
 /* ===== CTA ===== */
@@ -108,13 +96,6 @@ button{
   font-weight:700;
   border-radius:12px;
   cursor:pointer;
-  box-shadow:0 0 30px rgba(39,229,255,0.35);
-  transition:all .25s ease;
-}
-
-button:hover{
-  transform:translateY(-2px);
-  box-shadow:0 0 45px rgba(39,229,255,0.6);
 }
 
 button:disabled{
@@ -132,13 +113,39 @@ button:disabled{
 .error{color:#ef4444}
 
 /* ===== FOOTER ===== */
-footer{
+.footer-bar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:14px;
+  padding:12px 16px;
   border-top:1px solid var(--border);
-  padding:12px 12px;
-  text-align:center;
   font-size:13px;
   color:var(--text-muted);
 }
+
+.footer-status{
+  display:flex;
+  gap:18px;
+}
+
+.status-item{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  white-space:nowrap;
+}
+
+.dot{
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:#6b7280;
+}
+
+.dot.up{background:#22c55e}
+.dot.down{background:#ef4444}
 
 footer a{
   color:var(--accent);
@@ -160,74 +167,72 @@ footer a{
 <section class="hero">
   <h1>Portfolio Report Generator</h1>
   <p>
-    One-click generation of investor-ready portfolio reports —
-    asset allocation, XIRR performance, profit & loss highlights,
-    and rebalancing insights.
+    One-click generation of investor-ready portfolio reports with
+    allocation, XIRR, P&amp;L, and rebalancing insights.
   </p>
 </section>
 
 <section class="section">
-  <div class="cards">
-    <div class="card">
-      <h3>Asset Allocation</h3>
-      <ul>
-        <li>Equity, Debt, Hybrid & Commodities</li>
-        <li>Clean classification & totals</li>
-        <li>Investor-friendly structure</li>
-      </ul>
-    </div>
-
-    <div class="card">
-      <h3>Performance Metrics</h3>
-      <ul>
-        <li>XIRR-based returns</li>
-        <li>Profit & loss clarity</li>
-        <li>Time-weighted insights</li>
-      </ul>
-    </div>
-
-    <div class="card">
-      <h3>Rebalancing Insights</h3>
-      <ul>
-        <li>Target vs current allocation</li>
-        <li>Actionable adjustment guidance</li>
-        <li>Risk-aligned suggestions</li>
-      </ul>
-    </div>
-  </div>
-
   <div class="cta">
-    <button id="generateBtn" onclick="generateReport()">
+    <button id="generateBtn" type="button">
       Generate & Email Portfolio Report
     </button>
     <div id="status" class="status"></div>
   </div>
 </section>
 
-<footer>
-  Powered by <a href="https://ai-implementer.netlify.app/" target="_blank">AI-Implementer</a>
+<footer class="footer-bar">
+  <div class="footer-status">
+    <div id="portfolioServiceStatus" class="status-item">
+      <span class="dot"></span>
+      <span>Wealth Check: Checking…</span>
+    </div>
+
+    <div id="mfapiStatus" class="status-item">
+      <span class="dot"></span>
+      <span>MF API: Checking…</span>
+    </div>
+  </div>
+
+  <div>
+    Powered by
+    <a href="https://ai-implementer.netlify.app/" target="_blank">
+      AI-Implementer
+    </a>
+  </div>
 </footer>
 
 <script>
-const webhookUrl =
-"https://unsparse-sherman-nonfallaciously.ngrok-free.dev/webhook/dbf905eb-2008-400c-a3a3-3c6ebf81cf3f";
+/* ================= CONFIG ================= */
 
-async function generateReport(){
-  const btn = document.getElementById("generateBtn");
-  const status = document.getElementById("status");
+const GENERATE_WEBHOOK =
+  "https://unsparse-sherman-nonfallaciously.ngrok-free.dev/webhook/dbf905eb-2008-400c-a3a3-3c6ebf81cf3f";
+
+/* MUST be a SEPARATE lightweight endpoint */
+const HEALTH_WEBHOOK =
+  "https://unsparse-sherman-nonfallaciously.ngrok-free.dev/health";
+
+/* ================= SUBMIT LOGIC ================= */
+
+let hasSubmitted = false;
+
+const btn = document.getElementById("generateBtn");
+const status = document.getElementById("status");
+
+btn.addEventListener("click", submitOnce, { once: true });
+
+async function submitOnce(){
+  if (hasSubmitted) return;
+  hasSubmitted = true;
 
   btn.disabled = true;
-  btn.innerText = "Starting…";
-  status.className = "status";
+  btn.textContent = "Starting…";
+
   status.textContent = "Starting portfolio report generation…";
+  status.className = "status";
 
   try {
-    /**
-     * IMPORTANT:
-     * We do NOT wait for workflow completion.
-     * n8n should respond immediately (Respond Immediately / Always Respond).
-     */
-    await fetch(webhookUrl, {
+    await fetch(GENERATE_WEBHOOK, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -237,20 +242,54 @@ async function generateReport(){
     });
 
     status.textContent =
-      "✅ Report generation started successfully. This may take a few minutes & generated report will be emailed to you once ready. You can safely close this page.";
+      "✅ Report generation started. You will receive the report by email once ready.";
     status.classList.add("success");
 
-  } catch (e) {
+  } catch {
     status.textContent =
-      "❌ Unable to reach the service. Please check your connection or try again later.";
+      "❌ Unable to reach the service. Please try again later.";
     status.classList.add("error");
-  } finally {
-    setTimeout(() => {
-      btn.disabled = false;
-      btn.innerText = "Generate Portfolio Report";
-    }, 3000);
   }
 }
+
+/* ================= HEALTH CHECKS ================= */
+
+async function checkPortfolioService(){
+  const el = document.getElementById("portfolioServiceStatus");
+  const dot = el.querySelector(".dot");
+  const text = el.querySelector("span:last-child");
+
+  try {
+    const res = await fetch(HEALTH_WEBHOOK, { cache:"no-store" });
+    if (!res.ok) throw 0;
+
+    dot.classList.add("up");
+    text.textContent = "Wealth Check: Available";
+  } catch {
+    dot.classList.add("down");
+    text.textContent = "Wealth Check: Unreachable";
+  }
+}
+
+async function checkMfapi(){
+  const el = document.getElementById("mfapiStatus");
+  const dot = el.querySelector(".dot");
+  const text = el.querySelector("span:last-child");
+
+  try {
+    const res = await fetch("https://www.mfapi.in", { cache:"no-store" });
+    if (!res.ok) throw 0;
+
+    dot.classList.add("up");
+    text.textContent = "MF API: Available";
+  } catch {
+    dot.classList.add("down");
+    text.textContent = "MF API: Unreachable";
+  }
+}
+
+checkPortfolioService();
+checkMfapi();
 </script>
 
 </body>
