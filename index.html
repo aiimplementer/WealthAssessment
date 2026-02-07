@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Portfolio Report Generator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Roboto, Arial, sans-serif;
+      background: #f4f6f9;
+      color: #1f2937;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    /* Header */
+    .hero {
+      background: linear-gradient(135deg, #0f766e, #0d9488);
+      color: white;
+      border-radius: 14px;
+      padding: 50px 40px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    }
+
+    .hero h1 {
+      margin: 0 0 15px;
+      font-size: 32px;
+      font-weight: 600;
+    }
+
+    .hero p {
+      font-size: 17px;
+      opacity: 0.95;
+      max-width: 700px;
+      line-height: 1.6;
+    }
+
+    /* Card */
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 35px;
+      margin-top: 35px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    }
+
+    .card h2 {
+      margin-top: 0;
+      font-size: 24px;
+      color: #0f766e;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 18px;
+      margin: 25px 0 35px;
+    }
+
+    .feature {
+      background: #f9fafb;
+      border-radius: 10px;
+      padding: 18px;
+      border-left: 4px solid #0d9488;
+    }
+
+    .feature strong {
+      display: block;
+      margin-bottom: 6px;
+      color: #065f46;
+    }
+
+    /* Button */
+    .cta {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    button {
+      background: #0d9488;
+      color: white;
+      border: none;
+      padding: 16px 36px;
+      font-size: 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.25s ease;
+      box-shadow: 0 6px 14px rgba(13,148,136,0.35);
+    }
+
+    button:hover {
+      background: #0f766e;
+      transform: translateY(-1px);
+    }
+
+    button:disabled {
+      background: #9ca3af;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    /* Status */
+    .status {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 15px;
+      min-height: 22px;
+    }
+
+    .success {
+      color: #047857;
+    }
+
+    .error {
+      color: #b91c1c;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 13px;
+      color: #6b7280;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+
+    <div class="hero">
+      <h1>Portfolio Report Generator</h1>
+      <p>
+        Generate a clean, investor-ready portfolio report with asset allocation,
+        performance insights, XIRR summary, and rebalancing recommendations —
+        all in one click.
+      </p>
+    </div>
+
+    <div class="card">
+      <h2>What this report includes</h2>
+
+      <div class="features">
+        <div class="feature">
+          <strong>Asset Allocation</strong>
+          Equity, Debt, Commodities, Hybrid & Cash — clearly structured.
+        </div>
+        <div class="feature">
+          <strong>Performance Metrics</strong>
+          XIRR-based returns with profit/loss clearly highlighted.
+        </div>
+        <div class="feature">
+          <strong>Rebalancing Insights</strong>
+          Actionable guidance aligned with target allocation.
+        </div>
+        <div class="feature">
+          <strong>Print-Friendly PDF</strong>
+          Clean tables, readable layout, investor-safe formatting.
+        </div>
+      </div>
+
+      <div class="cta">
+        <button id="generateBtn" onclick="generateReport()">
+          Generate Portfolio Report
+        </button>
+      </div>
+
+      <div id="status" class="status"></div>
+    </div>
+
+    <footer>
+      © Portfolio Analytics Engine • Automated via n8n
+    </footer>
+
+  </div>
+
+  <script>
+    const webhookUrl = "https://unsparse-sherman-nonfallaciously.ngrok-free.dev/webhook/f76f05ac-4cbb-43a2-a703-b1955512130f";
+
+    async function generateReport() {
+      const btn = document.getElementById("generateBtn");
+      const status = document.getElementById("status");
+
+      btn.disabled = true;
+      btn.innerText = "Generating Report...";
+      status.innerText = "Please wait while your portfolio report is being generated...";
+      status.className = "status";
+
+      try {
+        const response = await fetch(webhookUrl, {
+          method: "POST"
+        });
+
+        if (!response.ok) {
+          throw new Error("Webhook call failed");
+        }
+
+        status.innerText =
+          "Portfolio report generation triggered successfully. You will receive the report shortly.";
+        status.classList.add("success");
+      } catch (err) {
+        status.innerText =
+          "Something went wrong while triggering the report. Please try again.";
+        status.classList.add("error");
+      } finally {
+        btn.disabled = false;
+        btn.innerText = "Generate Portfolio Report";
+      }
+    }
+  </script>
+</body>
+</html>
