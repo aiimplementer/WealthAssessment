@@ -173,6 +173,37 @@ footer a{
 </section>
 
 <section class="section">
+  <div class="cards">
+    <div class="card">
+      <h3>Asset Allocation</h3>
+      <ul>
+        <li>Equity, Debt, Hybrid & Commodities</li>
+        <li>Clean classification & totals</li>
+        <li>Investor-friendly structure</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>Performance Metrics</h3>
+      <ul>
+        <li>XIRR-based returns</li>
+        <li>Profit & loss clarity</li>
+        <li>Time-weighted insights</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>Rebalancing Insights</h3>
+      <ul>
+        <li>Target vs current allocation</li>
+        <li>Actionable adjustment guidance</li>
+        <li>Risk-aligned suggestions</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="section">
   <div class="cta">
     <button id="generateBtn" type="button">
       Generate & Email Portfolio Report
@@ -226,7 +257,6 @@ async function submitOnce(){
   hasSubmitted = true;
 
   btn.disabled = true;
-  btn.textContent = "Starting…";
 
   status.textContent = "Starting portfolio report generation…";
   status.className = "status";
@@ -281,10 +311,10 @@ async function checkMfapi(){
     if (!res.ok) throw 0;
 
     dot.classList.add("up");
-    text.textContent = "MF API: Available";
+    text.textContent = "Service: Available";
   } catch {
     dot.classList.add("down");
-    text.textContent = "MF API: Unreachable";
+    text.textContent = "Service: Unreachable";
   }
 }
 
