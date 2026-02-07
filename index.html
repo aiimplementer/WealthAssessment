@@ -321,11 +321,11 @@ async function checkMfapiStatus(){
     if (!res.ok) throw 0;
 
     dot.classList.add("up");
-    text.textContent = "MFAPI: Available";
+    text.textContent = "Service: Available";
 
   } catch {
     dot.classList.add("down");
-    text.textContent = "MFAPI: Unreachable";
+    text.textContent = "Service: Unreachable";
   }
 }
 
