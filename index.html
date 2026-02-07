@@ -239,18 +239,65 @@ async function generateReport(){
   status.textContent="Triggering portfolio report generation…";
   status.className="status";
 
-  try{
-    const res=await fetch(webhookUrl,{method:"POST"});
-    if(!res.ok) throw new Error();
-    status.textContent="Portfolio report triggered successfully.";
-    status.classList.add("success");
-  }catch(e){
-    status.textContent="Failed to trigger report. Please retry.";
-    status.classList.add("error");
-  }finally{
-    btn.disabled=false;
-    btn.innerText="Generate Portfolio Report";
+  try {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 15000); // 15s timeout
+
+  const res = await fetch(webhookUrl, {
+    method: "POST",
+    signal: controller.signal
+  });
+
+  clearTimeout(timeoutId);
+
+  if (!res.ok) {
+    // Handle known HTTP errors
+    if (res.status === 400) {
+      throw new Error("BAD_REQUEST");
+    }
+    if (res.status === 401 || res.status === 403) {
+      throw new Error("UNAUTHORIZED");
+    }
+    if (res.status === 404) {
+      throw new Error("NOT_FOUND");
+    }
+    if (res.status >= 500) {
+      throw new Error("SERVER_ERROR");
+    }
+
+    throw new Error("HTTP_ERROR");
   }
+
+  status.textContent =
+    "Portfolio report generation has been successfully initiated.";
+  status.classList.add("success");
+
+} catch (e) {
+
+  let message = "Something went wrong. Please try again.";
+
+  if (e.name === "AbortError") {
+    message = "Request timed out. The report is taking longer than expected.";
+  } else if (e.message === "BAD_REQUEST") {
+    message = "Invalid request. Please refresh the page and retry.";
+  } else if (e.message === "UNAUTHORIZED") {
+    message = "Authorization error. Please contact support.";
+  } else if (e.message === "NOT_FOUND") {
+    message = "Service endpoint not found. Please try later.";
+  } else if (e.message === "SERVER_ERROR") {
+    message = "Server is currently busy. Please retry shortly.";
+  } else if (e instanceof TypeError) {
+    message = "Network error. Please check your internet connection.";
+  }
+
+  status.textContent = message;
+  status.classList.add("error");
+
+} finally {
+  btn.disabled = false;
+  btn.innerText = "Generate Portfolio Report";
+}
+
 }
 </script>
 
