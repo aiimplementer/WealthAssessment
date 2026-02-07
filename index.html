@@ -198,7 +198,7 @@ footer a{
 
   <div class="cta">
     <button id="generateBtn" onclick="generateReport()">
-      Generate Portfolio Report
+      Generate & Email Portfolio Report
     </button>
     <div id="status" class="status"></div>
   </div>
@@ -237,7 +237,7 @@ async function generateReport(){
     });
 
     status.textContent =
-      "✅ Report generation started successfully. This may take a few minutes. You can safely close this page.";
+      "✅ Report generation started successfully. This may take a few minutes & generated report will be emailed to you once ready. You can safely close this page.";
     status.classList.add("success");
 
   } catch (e) {
