@@ -8,6 +8,8 @@
 <style>
 :root{
   --bg-dark:#060b1a;
+  --bg-mid:#0b1228;
+  --card-bg:rgba(255,255,255,0.06);
   --border:rgba(255,255,255,0.12);
   --accent:#27e5ff;
   --text-main:#e5e7eb;
@@ -25,18 +27,24 @@ body{
 
 /* ===== HEADER ===== */
 header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
   padding:18px 40px;
   border-bottom:1px solid var(--border);
 }
 
+.logo img{height:36px}
+
 /* ===== HERO ===== */
 .hero{
   text-align:center;
-  padding:10px;
+  padding:0px 10px 10px;
 }
 
 .hero h1{
   font-size:38px;
+  margin-bottom:18px;
   color:var(--accent);
 }
 
@@ -44,13 +52,51 @@ header{
   max-width:720px;
   margin:0 auto;
   font-size:17px;
+  line-height:1.6;
+  color:var(--text-muted);
+}
+
+/* ===== CARDS ===== */
+.section{
+  max-width:1100px;
+  margin:0 auto;
+  padding:20px 20px;
+}
+
+.cards{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:26px;
+}
+
+.card{
+  background:var(--card-bg);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:12px;
+  backdrop-filter:blur(12px);
+}
+
+.card h3{
+  margin-top:0;
+  color:var(--accent);
+  font-size:20px;
+}
+
+.card ul{
+  padding-left:18px;
+  margin:12px 0 0;
+}
+
+.card li{
+  margin-bottom:8px;
   color:var(--text-muted);
 }
 
 /* ===== CTA ===== */
 .cta{
   text-align:center;
-  margin:30px 0;
+  margin-top:20px;
 }
 
 button{
@@ -62,11 +108,24 @@ button{
   font-weight:700;
   border-radius:12px;
   cursor:pointer;
+  box-shadow:0 0 30px rgba(39,229,255,0.35);
+  transition:all .25s ease;
+}
+
+button:hover{
+  transform:translateY(-2px);
+  box-shadow:0 0 45px rgba(39,229,255,0.6);
+}
+
+button:disabled{
+  opacity:.6;
+  cursor:not-allowed;
 }
 
 .status{
-  margin-top:14px;
+  margin-top:18px;
   font-size:14px;
+  min-height:22px;
 }
 
 .success{color:#22c55e}
@@ -75,60 +134,77 @@ button{
 /* ===== FOOTER ===== */
 footer{
   border-top:1px solid var(--border);
-  padding:12px;
+  padding:12px 12px;
   text-align:center;
   font-size:13px;
   color:var(--text-muted);
 }
 
-.footer-status{
-  display:flex;
-  justify-content:center;
-  gap:18px;
-  margin-top:8px;
-  flex-wrap:wrap;
+footer a{
+  color:var(--accent);
+  text-decoration:none;
 }
-
-.status-item{
-  display:flex;
-  align-items:center;
-  gap:6px;
-  font-size:12px;
-}
-
-.dot{
-  width:8px;
-  height:8px;
-  border-radius:50%;
-}
-
-.up{ background:#22c55e; }
-.down{ background:#ef4444; }
 </style>
 </head>
 
 <body>
 
-<header></header>
+<header>
+  <div class="logo">
+    <img src="https://ai-implementer.netlify.app/images/ai-implementer-logo.png"
+         alt="AI Implementer"
+         onerror="this.style.display='none'">
+  </div>
+</header>
 
 <section class="hero">
   <h1>Portfolio Report Generator</h1>
   <p>
-    One-click generation of investor-ready portfolio reports with
-    performance, allocation & rebalancing insights.
+    One-click generation of investor-ready portfolio reports —
+    asset allocation, XIRR performance, profit & loss highlights,
+    and rebalancing insights.
   </p>
 </section>
 
-<div class="cta">
-  <button id="generateBtn" onclick="generateReport()">
-    Generate & Email Portfolio Report
-  </button>
-  <div id="status" class="status"></div>
-</div>
+<section class="section">
+  <div class="cards">
+    <div class="card">
+      <h3>Asset Allocation</h3>
+      <ul>
+        <li>Equity, Debt, Hybrid & Commodities</li>
+        <li>Clean classification & totals</li>
+        <li>Investor-friendly structure</li>
+      </ul>
+    </div>
 
-<footer>
-  Powered by <a href="https://ai-implementer.netlify.app/" target="_blank">AI-Implementer</a>
+    <div class="card">
+      <h3>Performance Metrics</h3>
+      <ul>
+        <li>XIRR-based returns</li>
+        <li>Profit & loss clarity</li>
+        <li>Time-weighted insights</li>
+      </ul>
+    </div>
 
+    <div class="card">
+      <h3>Rebalancing Insights</h3>
+      <ul>
+        <li>Target vs current allocation</li>
+        <li>Actionable adjustment guidance</li>
+        <li>Risk-aligned suggestions</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="cta">
+    <button id="generateBtn" onclick="generateReport()">
+      Generate & Email Portfolio Report
+    </button>
+    <div id="status" class="status"></div>
+  </div>
+</section>
+
+<footer class="footer-bar">
   <div class="footer-status">
     <div id="portfolioServiceStatus" class="status-item">
       <span class="dot"></span>
@@ -140,37 +216,54 @@ footer{
       <span>MFAPI: Checking…</span>
     </div>
   </div>
+  <div class="footer-right">
+    Powered by
+    <a href="https://ai-implementer.netlify.app/" target="_blank">AI-Implementer</a>
+  </div>
 </footer>
+
 
 <script>
 const webhookUrl =
 "https://unsparse-sherman-nonfallaciously.ngrok-free.dev/webhook/dbf905eb-2008-400c-a3a3-3c6ebf81cf3f";
 
-/* ===== GENERATE REPORT ===== */
 async function generateReport(){
   const btn = document.getElementById("generateBtn");
   const status = document.getElementById("status");
 
   btn.disabled = true;
+  btn.innerText = "Starting…";
+  status.className = "status";
   status.textContent = "Starting portfolio report generation…";
 
   try {
+    /**
+     * IMPORTANT:
+     * We do NOT wait for workflow completion.
+     * n8n should respond immediately (Respond Immediately / Always Respond).
+     */
     await fetch(webhookUrl, {
       method: "POST",
-      headers: {"Content-Type":"application/json"},
-      body: JSON.stringify({ ping:true })
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        source: "portfolio-ui",
+        requestedAt: new Date().toISOString()
+      })
     });
 
     status.textContent =
-      "✅ Report generation started. You’ll receive it by email.";
-    status.className = "status success";
+      "✅ Report generation started successfully. This may take a few minutes & generated report will be emailed to you once ready. You can safely close this page.";
+    status.classList.add("success");
 
-  } catch {
+  } catch (e) {
     status.textContent =
-      "❌ Unable to reach service. Please try later.";
-    status.className = "status error";
+      "❌ Unable to reach the service. Please check your connection or try again later.";
+    status.classList.add("error");
   } finally {
-    setTimeout(() => btn.disabled = false, 3000);
+    setTimeout(() => {
+      btn.disabled = false;
+      btn.innerText = "Generate Portfolio Report";
+    }, 3000);
   }
 }
 
