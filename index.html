@@ -144,6 +144,14 @@ footer a{
   color:var(--accent);
   text-decoration:none;
 }
+
+.api-status{
+  margin-top:6px;
+  font-size:12px;
+}
+
+.api-up{ color:#22c55e; }
+.api-down{ color:#ef4444; }
 </style>
 </head>
 
@@ -205,7 +213,18 @@ footer a{
 </section>
 
 <footer>
-  Powered by <a href="https://ai-implementer.netlify.app/" target="_blank">AI-Implementer</a>
+  Powered by
+  <a href="https://ai-implementer.netlify.app/" target="_blank">
+    AI-Implementer
+  </a>
+
+  <div id="portfolioServiceStatus" class="api-status">
+    Checking Portfolio Wealth service…
+  </div>
+
+  <div id="mfapiStatus" class="api-status">
+    Checking MFAPI server…
+  </div>
 </footer>
 
 <script>
@@ -222,11 +241,6 @@ async function generateReport(){
   status.textContent = "Starting portfolio report generation…";
 
   try {
-    /**
-     * IMPORTANT:
-     * We do NOT wait for workflow completion.
-     * n8n should respond immediately (Respond Immediately / Always Respond).
-     */
     await fetch(webhookUrl, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -237,12 +251,12 @@ async function generateReport(){
     });
 
     status.textContent =
-      "✅ Report generation started successfully. This may take a few minutes & generated report will be emailed to you once ready. You can safely close this page.";
+      "✅ Report generation started successfully. The report will be emailed once ready.";
     status.classList.add("success");
 
   } catch (e) {
     status.textContent =
-      "❌ Unable to reach the service. Please check your connection or try again later.";
+      "❌ Unable to reach the service. Please try again later.";
     status.classList.add("error");
   } finally {
     setTimeout(() => {
@@ -251,6 +265,68 @@ async function generateReport(){
     }, 3000);
   }
 }
+
+/* ===== PORTFOLIO SERVICE HEALTH CHECK ===== */
+async function checkPortfolioService(){
+  const el = document.getElementById("portfolioServiceStatus");
+
+  try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 4000);
+
+    const res = await fetch(webhookUrl, {
+      method: "OPTIONS",
+      cache: "no-store",
+      signal: controller.signal
+    });
+
+    clearTimeout(timeout);
+
+    if (res.ok) {
+      el.textContent = "🟢 Wealth Check Service: Available";
+      el.className = "api-status api-up";
+    } else {
+      throw new Error("Not OK");
+    }
+
+  } catch {
+    el.textContent = "🔴 Wealth Check Service: Unreachable";
+    el.className = "api-status api-down";
+  }
+}
+
+/* ===== MFAPI SERVER HEALTH CHECK ===== */
+async function checkMfapiStatus(){
+  const el = document.getElementById("mfapiStatus");
+
+  try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 4000);
+
+    const res = await fetch("https://www.mfapi.in", {
+      method: "GET",
+      cache: "no-store",
+      signal: controller.signal
+    });
+
+    clearTimeout(timeout);
+
+    if (res.ok) {
+      el.textContent = "🟢 MFAPI Server: Available";
+      el.className = "api-status api-up";
+    } else {
+      throw new Error("Not OK");
+    }
+
+  } catch {
+    el.textContent = "🔴 MFAPI Server: Unreachable";
+    el.className = "api-status api-down";
+  }
+}
+
+/* Run checks in order */
+checkPortfolioService();
+checkMfapiStatus();
 </script>
 
 </body>
