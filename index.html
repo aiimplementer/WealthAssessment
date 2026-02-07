@@ -267,27 +267,39 @@ async function generateReport(){
   const status = document.getElementById("status");
 
   btn.disabled = true;
+  btn.innerText = "Starting…";
+  status.className = "status";
   status.textContent = "Starting portfolio report generation…";
 
   try {
+    /**
+     * IMPORTANT:
+     * We do NOT wait for workflow completion.
+     * n8n should respond immediately (Respond Immediately / Always Respond).
+     */
     await fetch(webhookUrl, {
-      method:"POST",
-      headers:{ "Content-Type":"application/json" },
-      body: JSON.stringify({ source:"portfolio-ui" })
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        source: "portfolio-ui",
+        requestedAt: new Date().toISOString()
+      })
     });
 
     status.textContent =
       "✅ Report generation started successfully. This may take a few minutes & generated report will be emailed to you once ready. You can safely close this page.";
-    status.className = "status success";
+    status.classList.add("success");
 
-  } catch {
+  } catch (e) {
     status.textContent =
-      "❌ Unable to reach the service.";
-    status.className = "status error";
+      "❌ Unable to reach the service. Please check your connection or try again later.";
+    status.classList.add("error");
   } finally {
-    setTimeout(() => btn.disabled = false, 3000);
+    setTimeout(() => {
+      btn.disabled = false;
+      btn.innerText = "Generate Portfolio Report";
+    }, 3000);
   }
-}
 
 /* ===== HEALTH CHECKS ===== */
 async function checkPortfolioService(){
