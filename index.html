@@ -8,8 +8,6 @@
 <style>
 :root{
   --bg-dark:#060b1a;
-  --bg-mid:#0b1228;
-  --card-bg:rgba(255,255,255,0.06);
   --border:rgba(255,255,255,0.12);
   --accent:#27e5ff;
   --text-main:#e5e7eb;
@@ -27,24 +25,18 @@ body{
 
 /* ===== HEADER ===== */
 header{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
   padding:18px 40px;
   border-bottom:1px solid var(--border);
 }
 
-.logo img{height:36px}
-
 /* ===== HERO ===== */
 .hero{
   text-align:center;
-  padding:0px 10px 10px;
+  padding:10px;
 }
 
 .hero h1{
   font-size:38px;
-  margin-bottom:18px;
   color:var(--accent);
 }
 
@@ -52,51 +44,13 @@ header{
   max-width:720px;
   margin:0 auto;
   font-size:17px;
-  line-height:1.6;
-  color:var(--text-muted);
-}
-
-/* ===== CARDS ===== */
-.section{
-  max-width:1100px;
-  margin:0 auto;
-  padding:20px 20px;
-}
-
-.cards{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-  gap:26px;
-}
-
-.card{
-  background:var(--card-bg);
-  border:1px solid var(--border);
-  border-radius:18px;
-  padding:12px;
-  backdrop-filter:blur(12px);
-}
-
-.card h3{
-  margin-top:0;
-  color:var(--accent);
-  font-size:20px;
-}
-
-.card ul{
-  padding-left:18px;
-  margin:12px 0 0;
-}
-
-.card li{
-  margin-bottom:8px;
   color:var(--text-muted);
 }
 
 /* ===== CTA ===== */
 .cta{
   text-align:center;
-  margin-top:20px;
+  margin:30px 0;
 }
 
 button{
@@ -108,24 +62,11 @@ button{
   font-weight:700;
   border-radius:12px;
   cursor:pointer;
-  box-shadow:0 0 30px rgba(39,229,255,0.35);
-  transition:all .25s ease;
-}
-
-button:hover{
-  transform:translateY(-2px);
-  box-shadow:0 0 45px rgba(39,229,255,0.6);
-}
-
-button:disabled{
-  opacity:.6;
-  cursor:not-allowed;
 }
 
 .status{
-  margin-top:18px;
+  margin-top:14px;
   font-size:14px;
-  min-height:22px;
 }
 
 .success{color:#22c55e}
@@ -134,96 +75,70 @@ button:disabled{
 /* ===== FOOTER ===== */
 footer{
   border-top:1px solid var(--border);
-  padding:12px 12px;
+  padding:12px;
   text-align:center;
   font-size:13px;
   color:var(--text-muted);
 }
 
-footer a{
-  color:var(--accent);
-  text-decoration:none;
+.footer-status{
+  display:flex;
+  justify-content:center;
+  gap:18px;
+  margin-top:8px;
+  flex-wrap:wrap;
 }
 
-.api-status{
-  margin-top:6px;
+.status-item{
+  display:flex;
+  align-items:center;
+  gap:6px;
   font-size:12px;
 }
 
-.api-up{ color:#22c55e; }
-.api-down{ color:#ef4444; }
+.dot{
+  width:8px;
+  height:8px;
+  border-radius:50%;
+}
+
+.up{ background:#22c55e; }
+.down{ background:#ef4444; }
 </style>
 </head>
 
 <body>
 
-<header>
-  <div class="logo">
-    <img src="https://ai-implementer.netlify.app/images/ai-implementer-logo.png"
-         alt="AI Implementer"
-         onerror="this.style.display='none'">
-  </div>
-</header>
+<header></header>
 
 <section class="hero">
   <h1>Portfolio Report Generator</h1>
   <p>
-    One-click generation of investor-ready portfolio reports —
-    asset allocation, XIRR performance, profit & loss highlights,
-    and rebalancing insights.
+    One-click generation of investor-ready portfolio reports with
+    performance, allocation & rebalancing insights.
   </p>
 </section>
 
-<section class="section">
-  <div class="cards">
-    <div class="card">
-      <h3>Asset Allocation</h3>
-      <ul>
-        <li>Equity, Debt, Hybrid & Commodities</li>
-        <li>Clean classification & totals</li>
-        <li>Investor-friendly structure</li>
-      </ul>
-    </div>
-
-    <div class="card">
-      <h3>Performance Metrics</h3>
-      <ul>
-        <li>XIRR-based returns</li>
-        <li>Profit & loss clarity</li>
-        <li>Time-weighted insights</li>
-      </ul>
-    </div>
-
-    <div class="card">
-      <h3>Rebalancing Insights</h3>
-      <ul>
-        <li>Target vs current allocation</li>
-        <li>Actionable adjustment guidance</li>
-        <li>Risk-aligned suggestions</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="cta">
-    <button id="generateBtn" onclick="generateReport()">
-      Generate & Email Portfolio Report
-    </button>
-    <div id="status" class="status"></div>
-  </div>
-</section>
+<div class="cta">
+  <button id="generateBtn" onclick="generateReport()">
+    Generate & Email Portfolio Report
+  </button>
+  <div id="status" class="status"></div>
+</div>
 
 <footer>
-  Powered by
-  <a href="https://ai-implementer.netlify.app/" target="_blank">
-    AI-Implementer
-  </a>
+  Powered by <a href="https://ai-implementer.netlify.app/" target="_blank">AI-Implementer</a>
 
-  <div id="portfolioServiceStatus" class="api-status">
-    Checking Portfolio Wealth service…
-  </div>
+  <div class="footer-status">
+    <div id="portfolioServiceStatus" class="status-item">
+      <span class="dot"></span>
+      <span>Wealth Check: Checking…</span>
+    </div>
 
-  <div id="mfapiStatus" class="api-status">
-    Checking MFAPI server…
+    <div id="mfapiStatus" class="status-item">
+      <span class="dot"></span>
+      <span>MFAPI: Checking…</span>
+    </div>
   </div>
 </footer>
 
@@ -231,100 +146,74 @@ footer a{
 const webhookUrl =
 "https://unsparse-sherman-nonfallaciously.ngrok-free.dev/webhook/dbf905eb-2008-400c-a3a3-3c6ebf81cf3f";
 
+/* ===== GENERATE REPORT ===== */
 async function generateReport(){
   const btn = document.getElementById("generateBtn");
   const status = document.getElementById("status");
 
   btn.disabled = true;
-  btn.innerText = "Starting…";
-  status.className = "status";
   status.textContent = "Starting portfolio report generation…";
 
   try {
     await fetch(webhookUrl, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        source: "portfolio-ui",
-        requestedAt: new Date().toISOString()
-      })
+      headers: {"Content-Type":"application/json"},
+      body: JSON.stringify({ ping:true })
     });
 
     status.textContent =
-      "✅ Report generation started successfully. The report will be emailed once ready.";
-    status.classList.add("success");
+      "✅ Report generation started. You’ll receive it by email.";
+    status.className = "status success";
 
-  } catch (e) {
+  } catch {
     status.textContent =
-      "❌ Unable to reach the service. Please try again later.";
-    status.classList.add("error");
+      "❌ Unable to reach service. Please try later.";
+    status.className = "status error";
   } finally {
-    setTimeout(() => {
-      btn.disabled = false;
-      btn.innerText = "Generate Portfolio Report";
-    }, 3000);
+    setTimeout(() => btn.disabled = false, 3000);
   }
 }
 
-/* ===== PORTFOLIO SERVICE HEALTH CHECK ===== */
+/* ===== HEALTH CHECKS ===== */
 async function checkPortfolioService(){
   const el = document.getElementById("portfolioServiceStatus");
+  const dot = el.querySelector(".dot");
+  const text = el.querySelector("span:last-child");
 
   try {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 4000);
-
-    const res = await fetch(webhookUrl, {
-      method: "OPTIONS",
-      cache: "no-store",
-      signal: controller.signal
+    await fetch(webhookUrl, {
+      method:"POST",
+      headers:{ "Content-Type":"application/json" },
+      body: JSON.stringify({ health:true })
     });
 
-    clearTimeout(timeout);
-
-    if (res.ok) {
-      el.textContent = "🟢 Wealth Check Service: Available";
-      el.className = "api-status api-up";
-    } else {
-      throw new Error("Not OK");
-    }
+    dot.className = "dot up";
+    text.textContent = "Wealth Check: Available";
 
   } catch {
-    el.textContent = "🔴 Wealth Check Service: Unreachable";
-    el.className = "api-status api-down";
+    dot.className = "dot down";
+    text.textContent = "Wealth Check: Unreachable";
   }
 }
 
-/* ===== MFAPI SERVER HEALTH CHECK ===== */
 async function checkMfapiStatus(){
   const el = document.getElementById("mfapiStatus");
+  const dot = el.querySelector(".dot");
+  const text = el.querySelector("span:last-child");
 
   try {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 4000);
+    const res = await fetch("https://www.mfapi.in", { cache:"no-store" });
+    if (!res.ok) throw 0;
 
-    const res = await fetch("https://www.mfapi.in", {
-      method: "GET",
-      cache: "no-store",
-      signal: controller.signal
-    });
-
-    clearTimeout(timeout);
-
-    if (res.ok) {
-      el.textContent = "🟢 MFAPI Server: Available";
-      el.className = "api-status api-up";
-    } else {
-      throw new Error("Not OK");
-    }
+    dot.className = "dot up";
+    text.textContent = "MFAPI: Available";
 
   } catch {
-    el.textContent = "🔴 MFAPI Server: Unreachable";
-    el.className = "api-status api-down";
+    dot.className = "dot down";
+    text.textContent = "MFAPI: Unreachable";
   }
 }
 
-/* Run checks in order */
 checkPortfolioService();
 checkMfapiStatus();
 </script>
