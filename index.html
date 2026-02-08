@@ -329,12 +329,12 @@ async function checkMfapi(){
     if (!data?.meta?.scheme_name) throw 0;
 
     dot.classList.add("up");
-    text.textContent = "MF API: Available";
+    text.textContent = "Service: Available";
 
   } catch {
     clearTimeout(timeout);
     dot.classList.add("down");
-    text.textContent = "MF API: Unreachable";
+    text.textContent = "Service: Unreachable";
   }
 }
 
