@@ -309,11 +309,19 @@ async function checkMfapi(){
   dot.classList.remove("up", "down");
   text.textContent = "MF API: Checking…";
 
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 5000); // 5s timeout
+
   try {
     const res = await fetch(
       "https://api.mfapi.in/mf/120503",
-      { cache: "no-store" }
+      {
+        cache: "no-store",
+        signal: controller.signal
+      }
     );
+
+    clearTimeout(timeout);
 
     if (!res.ok) throw 0;
 
@@ -321,10 +329,12 @@ async function checkMfapi(){
     if (!data?.meta?.scheme_name) throw 0;
 
     dot.classList.add("up");
-    text.textContent = "Service: Available";
+    text.textContent = "MF API: Available";
+
   } catch {
+    clearTimeout(timeout);
     dot.classList.add("down");
-    text.textContent = "Service: Unreachable";
+    text.textContent = "MF API: Unreachable";
   }
 }
 
