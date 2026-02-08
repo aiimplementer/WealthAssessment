@@ -307,7 +307,7 @@ async function checkMfapi(){
   const text = el.querySelector("span:last-child");
 
   dot.classList.remove("up", "down");
-  text.textContent = "MF API: Checking…";
+  text.textContent = "Service: Checking…";
 
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 5000); // 5s timeout
