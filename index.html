@@ -239,7 +239,6 @@ footer a{
 const GENERATE_WEBHOOK =
   "https://unsparse-sherman-nonfallaciously.ngrok-free.dev/webhook/dfd95275-31c4-4bf7-a81d-5ffd46f80155";
 
-/* MUST be a SEPARATE lightweight endpoint */
 const HEALTH_WEBHOOK =
   "https://unsparse-sherman-nonfallaciously.ngrok-free.dev/health";
 
@@ -257,7 +256,6 @@ async function submitOnce(){
   hasSubmitted = true;
 
   btn.disabled = true;
-
   status.textContent = "Starting portfolio report generation…";
   status.className = "status";
 
@@ -289,6 +287,8 @@ async function checkPortfolioService(){
   const dot = el.querySelector(".dot");
   const text = el.querySelector("span:last-child");
 
+  dot.classList.remove("up", "down");
+
   try {
     const res = await fetch(HEALTH_WEBHOOK, { cache:"no-store" });
     if (!res.ok) throw 0;
@@ -306,23 +306,27 @@ async function checkMfapi(){
   const dot = el.querySelector(".dot");
   const text = el.querySelector("span:last-child");
 
+  dot.classList.remove("up", "down");
+  text.textContent = "MF API: Checking…";
+
   try {
     const res = await fetch(
-      "https://unsparse-sherman-nonfallaciously.ngrok-free.dev/health-mfapi",
+      "https://api.mfapi.in/mf/120503",
       { cache: "no-store" }
     );
 
     if (!res.ok) throw 0;
 
-    dot.classList.add("up");
-    text.textContent = "Service: Available";
+    const data = await res.json();
+    if (!data?.meta?.scheme_name) throw 0;
 
+    dot.classList.add("up");
+    text.textContent = "MF API: Available";
   } catch {
     dot.classList.add("down");
-    text.textContent = "Service: Unreachable";
+    text.textContent = "MF API: Unreachable";
   }
 }
-
 
 checkPortfolioService();
 checkMfapi();
