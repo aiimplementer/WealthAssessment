@@ -94,6 +94,9 @@ button{
 button.secondary{
   background:linear-gradient(135deg,#a5f3fc,#38bdf8);
 }
+button.tertiary{
+  background:linear-gradient(135deg,#fde68a,#f59e0b);
+}
 button:disabled{
   opacity:.6;
   cursor:not-allowed;
@@ -202,6 +205,10 @@ footer a{
       Get Portfolio Overview
     </button>
 
+    <button id="generateOpportunityBtn" class="tertiary" type="button">
+      Get Portfolio Opportunity Report
+    </button>
+
     <div id="status" class="status"></div>
   </div>
 </section>
@@ -235,6 +242,9 @@ const FULL_REPORT_WEBHOOK =
 
 const OVERVIEW_WEBHOOK =
   "https://unsparse-sherman-nonfallaciously.ngrok-free.dev/webhook/53154b47-ea7d-430a-94de-b88280ed7148";
+
+const OPPORTUNITY_WEBHOOK =
+  "https://unsparse-sherman-nonfallaciously.ngrok-free.dev/webhook/df740dab-ab92-4e9d-8f82-80038189504c";
 
 const HEALTH_WEBHOOK =
   "https://unsparse-sherman-nonfallaciously.ngrok-free.dev/health";
@@ -279,13 +289,19 @@ function setupButton(btnId, webhook, successMsg){
 setupButton(
   "generateFullBtn",
   FULL_REPORT_WEBHOOK,
-  "✅ Full portfolio report generation started. The report will be emailed once ready."
+  "✅ Portfolio re-balancing report generation started. The report will be emailed once ready."
 );
 
 setupButton(
   "generateOverviewBtn",
   OVERVIEW_WEBHOOK,
   "✅ Portfolio overview generation started. You will receive it shortly."
+);
+
+setupButton(
+  "generateOpportunityBtn",
+  OPPORTUNITY_WEBHOOK,
+  "✅ Portfolio opportunity report generation started. Insights will be shared shortly."
 );
 
 /* ================= HEALTH CHECKS ================= */
