@@ -166,45 +166,63 @@ footer a{
 
 <section class="section">
   <div class="cards">
+  
+   <!-- OVERVIEW REPORT -->
     <div class="card">
-      <h3>Asset Allocation</h3>
+      <h3>Portfolio Overview</h3>
       <ul>
-        <li>Equity, Debt, Hybrid & Commodities</li>
-        <li>Clean classification & totals</li>
-        <li>Investor-friendly structure</li>
+        <li>Total value, gains & allocation split</li>
+        <li>XIRR & performance snapshot</li>
+        <li>Clean asset-wise summary</li>
+        <li>Quick health check</li>
       </ul>
+      <p class="text-muted">
+        Ideal for a fast, high-level portfolio understanding.
+      </p>
     </div>
 
+    <!-- FULL REBALANCING REPORT -->
     <div class="card">
-      <h3>Performance Metrics</h3>
+      <h3>Portfolio Re-balancing Report</h3>
       <ul>
-        <li>XIRR-based returns</li>
-        <li>Profit & loss clarity</li>
-        <li>Time-weighted insights</li>
+        <li>Current vs target asset allocation</li>
+        <li>Exact buy / sell adjustment amounts</li>
+        <li>Risk alignment & drift correction</li>
+        <li>Investor-ready summary</li>
       </ul>
+      <p class="text-muted">
+        Best for investors looking to realign their portfolio with long-term goals.
+      </p>
+    </div>   
+
+    <!-- OPPORTUNITY REPORT -->
+    <div class="card">
+      <h3>Opportunity Insights</h3>
+      <ul>
+        <li>Under-allocated growth opportunities</li>
+        <li>Over-exposed risk areas</li>
+        <li>Category & market-cap gaps</li>
+        <li>Actionable improvement ideas</li>
+      </ul>
+      <p class="text-muted">
+        Designed to uncover hidden potential and optimization ideas.
+      </p>
     </div>
 
-    <div class="card">
-      <h3>Rebalancing Insights</h3>
-      <ul>
-        <li>Target vs current allocation</li>
-        <li>Actionable adjustment guidance</li>
-        <li>Risk-aligned suggestions</li>
-      </ul>
-    </div>
   </div>
 </section>
 
+
 <section class="section">
   <div class="cta">
-    <button id="generateFullBtn" type="button">
-      Get Portfolio Re-balancing Report
-    </button>
-
-    <button id="generateOverviewBtn" class="secondary" type="button">
+  <button id="generateOverviewBtn" class="secondary" type="button">
       Get Portfolio Overview
     </button>
 
+    <button id="generateFullBtn" type="button">
+      Get Portfolio Re-balancing Report
+    </button>
+    
     <button id="generateOpportunityBtn" class="tertiary" type="button">
       Get Portfolio Opportunity Report
     </button>
