@@ -307,16 +307,22 @@ async function checkMfapi(){
   const text = el.querySelector("span:last-child");
 
   try {
-    const res = await fetch("https://www.mfapi.in", { cache:"no-store" });
+    const res = await fetch(
+      "https://unsparse-sherman-nonfallaciously.ngrok-free.dev/health-mfapi",
+      { cache: "no-store" }
+    );
+
     if (!res.ok) throw 0;
 
     dot.classList.add("up");
-    text.textContent = "Service: Available";
+    text.textContent = "MF API: Available";
+
   } catch {
     dot.classList.add("down");
-    text.textContent = "Service: Unreachable";
+    text.textContent = "MF API: Unreachable";
   }
 }
+
 
 checkPortfolioService();
 checkMfapi();
