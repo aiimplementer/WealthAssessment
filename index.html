@@ -42,7 +42,7 @@ header{
 }
 .hero h1{
   font-size:38px;
-  margin-bottom:18px;
+  margin-bottom:10px;
   color:var(--accent);
 }
 .hero p{
@@ -59,50 +59,91 @@ header{
   margin:0 auto;
   padding:13px;
 }
+
 .cards{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
   gap:26px;
 }
+
 .card{
   background:var(--card-bg);
   border:1px solid var(--border);
   border-radius:18px;
-  padding:12px;
+  padding:16px;
+  display:flex;
+  flex-direction:column;
 }
+
 .card h3{
   margin-top:0;
   color:var(--accent);
 }
 
-/* ===== CTA ===== */
-.cta{
-  text-align:center;
-  margin-top:20px;
+.card p{
+  margin-bottom:14px;
 }
+
+/* CTA inside card */
+.card-cta{
+  margin-top:auto;
+  text-align:center;
+}
+
+/* ===== BUTTONS ===== */
 button{
+  width:100%;
   background:linear-gradient(135deg,#22d3ee,#0ea5e9);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.15) inset,
+    0 12px 34px rgba(14,165,233,0.35);
   border:none;
   color:#020617;
-  padding:16px 42px;
-  font-size:16px;
+  padding:14px 18px;
+  font-size:15px;
   font-weight:700;
-  border-radius:12px;
+  border-radius:14px;
   cursor:pointer;
-  margin:10px;
+  transition:transform .15s ease, box-shadow .15s ease, opacity .15s ease;
 }
+
+button:hover:not(:disabled){
+  transform:translateY(-1px);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.25) inset,
+    0 18px 46px rgba(14,165,233,0.45);
+}
+
 button.secondary{
-  background:linear-gradient(135deg,#a5f3fc,#38bdf8);
+  background:linear-gradient(135deg,#7dd3fc,#38bdf8);
+  color:#020617;
+  box-shadow:0 10px 30px rgba(56,189,248,.35);
 }
+
+button.primary{
+  background:linear-gradient(135deg,#22d3ee,#0ea5e9);
+  color:#020617;
+  box-shadow:0 12px 36px rgba(14,165,233,.45);
+}
+
+
 button.tertiary{
-  background:linear-gradient(135deg,#fde68a,#f59e0b);
+  background:linear-gradient(135deg,#fde68a,#fbbf24);
+  color:#422006;
+  box-shadow:0 12px 36px rgba(251,191,36,.45);
 }
+
 button:disabled{
-  opacity:.6;
+  opacity:.55;
   cursor:not-allowed;
+  transform:none;
+  box-shadow:none;
 }
+
+/* ===== STATUS ===== */
 .status{
-  margin-top:18px;
+  margin-top:16px;
+  text-align:center;
   font-size:14px;
   min-height:22px;
 }
@@ -113,24 +154,28 @@ button:disabled{
 .footer-bar{
   display:flex;
   align-items:center;
-  justify-content:space-between;
-  flex-wrap:wrap;
-  gap:14px;
-  padding:12px 12px;
+  justify-content:space-between; /* LEFT ↔ RIGHT */
+  gap:20px;
+  padding:14px 20px;
   border-top:1px solid var(--border);
   font-size:13px;
   color:var(--text-muted);
 }
+
+
 .footer-status{
   display:flex;
-  gap:18px;
+  align-items:center;
+  gap:22px;
 }
+
 .status-item{
   display:flex;
   align-items:center;
   gap:6px;
   white-space:nowrap;
 }
+
 .dot{
   width:8px;
   height:8px;
@@ -139,6 +184,7 @@ button:disabled{
 }
 .dot.up{background:#22c55e}
 .dot.down{background:#ef4444}
+
 footer a{
   color:var(--accent);
   text-decoration:none;
@@ -166,8 +212,8 @@ footer a{
 
 <section class="section">
   <div class="cards">
-  
-   <!-- OVERVIEW REPORT -->
+
+    <!-- OVERVIEW -->
     <div class="card">
       <h3>Portfolio Overview</h3>
       <ul>
@@ -179,9 +225,15 @@ footer a{
       <p class="text-muted">
         Ideal for a fast, high-level portfolio understanding.
       </p>
+
+      <div class="card-cta">
+        <button id="generateOverviewBtn" class="secondary">
+          Get Portfolio Overview
+        </button>
+      </div>
     </div>
 
-    <!-- FULL REBALANCING REPORT -->
+    <!-- REBALANCING -->
     <div class="card">
       <h3>Portfolio Re-balancing Report</h3>
       <ul>
@@ -193,9 +245,15 @@ footer a{
       <p class="text-muted">
         Best for investors looking to realign their portfolio with long-term goals.
       </p>
-    </div>   
 
-    <!-- OPPORTUNITY REPORT -->
+      <div class="card-cta">
+        <button id="generateFullBtn" class="primary">
+          Get Portfolio Re-balancing Report
+        </button>
+      </div>
+    </div>
+
+    <!-- OPPORTUNITY -->
     <div class="card">
       <h3>Opportunity Insights</h3>
       <ul>
@@ -207,28 +265,17 @@ footer a{
       <p class="text-muted">
         Designed to uncover hidden potential and optimization ideas.
       </p>
+
+      <div class="card-cta">
+        <button id="generateOpportunityBtn" class="tertiary">
+          Get Portfolio Opportunity Report
+        </button>
+      </div>
     </div>
 
   </div>
-</section>
 
-
-<section class="section">
-  <div class="cta">
-  <button id="generateOverviewBtn" class="secondary" type="button">
-      Get Portfolio Overview
-    </button>
-
-    <button id="generateFullBtn" type="button">
-      Get Portfolio Re-balancing Report
-    </button>
-    
-    <button id="generateOpportunityBtn" class="tertiary" type="button">
-      Get Portfolio Opportunity Report
-    </button>
-
-    <div id="status" class="status"></div>
-  </div>
+  <div id="status" class="status"></div>
 </section>
 
 <footer class="footer-bar">
@@ -253,21 +300,14 @@ footer a{
 </footer>
 
 <script>
-/* ================= CONFIG ================= */
-
 const FULL_REPORT_WEBHOOK =
   "https://unsparse-sherman-nonfallaciously.ngrok-free.dev/webhook/dfd95275-31c4-4bf7-a81d-5ffd46f80155";
-
 const OVERVIEW_WEBHOOK =
   "https://unsparse-sherman-nonfallaciously.ngrok-free.dev/webhook/53154b47-ea7d-430a-94de-b88280ed7148";
-
 const OPPORTUNITY_WEBHOOK =
   "https://unsparse-sherman-nonfallaciously.ngrok-free.dev/webhook/df740dab-ab92-4e9d-8f82-80038189504c";
-
 const HEALTH_WEBHOOK =
   "https://unsparse-sherman-nonfallaciously.ngrok-free.dev/health";
-
-/* ================= SUBMIT LOGIC ================= */
 
 const status = document.getElementById("status");
 
@@ -285,11 +325,11 @@ function setupButton(btnId, webhook, successMsg){
 
     try {
       await fetch(webhook, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          source: "portfolio-ui",
-          requestedAt: new Date().toISOString()
+        method:"POST",
+        headers:{ "Content-Type":"application/json" },
+        body:JSON.stringify({
+          source:"portfolio-ui",
+          requestedAt:new Date().toISOString()
         })
       });
 
@@ -304,42 +344,27 @@ function setupButton(btnId, webhook, successMsg){
   });
 }
 
-setupButton(
-  "generateFullBtn",
-  FULL_REPORT_WEBHOOK,
-  "✅ Portfolio re-balancing report generation started. The report will be emailed once ready."
-);
-
-setupButton(
-  "generateOverviewBtn",
-  OVERVIEW_WEBHOOK,
-  "✅ Portfolio overview generation started. You will receive it shortly."
-);
-
-setupButton(
-  "generateOpportunityBtn",
-  OPPORTUNITY_WEBHOOK,
-  "✅ Portfolio opportunity report generation started. Insights will be shared shortly."
-);
-
-/* ================= HEALTH CHECKS ================= */
+setupButton("generateFullBtn", FULL_REPORT_WEBHOOK,
+  "✅ Portfolio re-balancing report generation started. The report will be emailed once ready.");
+setupButton("generateOverviewBtn", OVERVIEW_WEBHOOK,
+  "✅ Portfolio overview generation started. You will receive it shortly.");
+setupButton("generateOpportunityBtn", OPPORTUNITY_WEBHOOK,
+  "✅ Portfolio opportunity report generation started. Insights will be shared shortly.");
 
 async function checkPortfolioService(){
   const el = document.getElementById("portfolioServiceStatus");
   const dot = el.querySelector(".dot");
   const text = el.querySelector("span:last-child");
+  dot.classList.remove("up","down");
 
-  dot.classList.remove("up", "down");
-
-  try {
-    const res = await fetch(HEALTH_WEBHOOK, { cache:"no-store" });
-    if (!res.ok) throw 0;
-
+  try{
+    const res = await fetch(HEALTH_WEBHOOK,{cache:"no-store"});
+    if(!res.ok) throw 0;
     dot.classList.add("up");
-    text.textContent = "Wealth Check: Available";
-  } catch {
+    text.textContent="Wealth Check: Available";
+  }catch{
     dot.classList.add("down");
-    text.textContent = "Wealth Check: Unreachable";
+    text.textContent="Wealth Check: Unreachable";
   }
 }
 
@@ -347,30 +372,22 @@ async function checkMfapi(){
   const el = document.getElementById("mfapiStatus");
   const dot = el.querySelector(".dot");
   const text = el.querySelector("span:last-child");
+  dot.classList.remove("up","down");
 
-  dot.classList.remove("up", "down");
-  text.textContent = "Service: Checking…";
+  const controller=new AbortController();
+  const timeout=setTimeout(()=>controller.abort(),5000);
 
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 5000);
-
-  try {
-    const res = await fetch(
-      "https://api.mfapi.in/mf/120503",
-      { cache:"no-store", signal: controller.signal }
-    );
-
+  try{
+    const res=await fetch("https://api.mfapi.in/mf/120503",{signal:controller.signal});
     clearTimeout(timeout);
-
-    const data = await res.json();
-    if (!data?.meta?.scheme_name) throw 0;
-
+    const data=await res.json();
+    if(!data?.meta?.scheme_name) throw 0;
     dot.classList.add("up");
-    text.textContent = "Service: Available";
-  } catch {
+    text.textContent="Service: Available";
+  }catch{
     clearTimeout(timeout);
     dot.classList.add("down");
-    text.textContent = "Service: Unreachable";
+    text.textContent="Service: Unreachable";
   }
 }
 
