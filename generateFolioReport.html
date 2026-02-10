@@ -47,7 +47,7 @@
       padding: 64px 20px 96px;
     }
 
-    /* Header / hero */
+    /* Header */
     header {
       text-align: center;
       margin-bottom: 56px;
@@ -72,9 +72,9 @@
       margin-right: auto;
     }
 
-    /* Upload card */
+    /* Upload card – FULL WIDTH */
     .upload-card {
-      max-width: 420px;
+      max-width: 100%;
       margin: 0 auto;
       padding: 32px;
       background: var(--bg-card);
@@ -137,11 +137,11 @@
       color: var(--text-muted);
     }
 
-    /* Result section – SAME WIDTH AS UPLOAD CARD */
+    /* Result section – FULL WIDTH */
     #result {
       display: none;
       margin: 56px auto 0;
-      max-width: 420px;
+      max-width: 100%;
       padding: 32px;
       background: var(--bg-card);
       backdrop-filter: blur(14px);
@@ -199,7 +199,6 @@
       <div id="message"></div>
     </div>
 
-    <!-- Seamless continuation – same width as upload-card -->
     <div id="result"></div>
 
   </div>
