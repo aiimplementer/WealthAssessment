@@ -329,7 +329,7 @@
   <div class="footer-status">
     <div id="portfolioServiceStatus" class="status-item">
       <span class="dot"></span>
-      <span>Wealth Check: Checking…</span>
+      <span>Portfolio Analysis: Checking…</span>
     </div>
 
     <div id="mfapiStatus" class="status-item">
@@ -434,10 +434,10 @@
     const res = await fetch(HEALTH_WEBHOOK,{cache:"no-store"});
     if(!res.ok) throw 0;
     dot.classList.add("up");
-    text.textContent="Wealth Check: Available";
+    text.textContent="Portfolio Analysis: Available";
   }catch{
     dot.classList.add("down");
-    text.textContent="Wealth Check: Unreachable";
+    text.textContent="Portfolio Analysis: Unreachable";
   }
 }
 
