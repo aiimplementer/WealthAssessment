@@ -280,6 +280,39 @@
   const submitBtn = document.getElementById("submitBtn");
   const message = document.getElementById("message");
   const result = document.getElementById("result");
+  
+  //Add TIMER
+  let seconds = 0;
+  let timer = null;
+
+  // START TIMER
+  function startTimer() {
+	  seconds = 0;
+
+	  timer = setInterval(() => {
+		seconds++;
+
+		const mins = Math.floor(seconds / 60);
+		const secs = seconds % 60;
+
+		message.textContent =
+		  mins > 0
+			? `Generating report… (${mins}m ${secs}s)`
+			: `Generating report… (${secs}s)`;
+	  }, 1000);
+	}
+
+	// STOP TIMER + FINAL MESSAGE
+	function stopTimerSuccess() {
+	  if (timer) {
+		clearInterval(timer);
+		timer = null;
+	  }
+
+	  message.textContent = "Report generated successfully";
+	}
+
+  //
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -289,18 +322,7 @@
     submitBtn.disabled = true;
 
     // ⏱ TIMER — added
-    let seconds = 0;
-	const timer = setInterval(() => {
-	  seconds++;
-
-	  const mins = Math.floor(seconds / 60);
-	  const secs = seconds % 60;
-
-	  message.textContent =
-		mins > 0
-		  ? `Generating report… (${mins}m ${secs}s)`
-		  : `Generating report… (${secs}s)`;
-	}, 1000);
+    startTimer();
 
 
     try {
@@ -318,7 +340,8 @@
 
       result.innerHTML = html;
       result.style.display = "block";
-      message.textContent = `Report generated successfully (${seconds}s)`;
+	  stopTimerSuccess();
+      //message.textContent = `Report generated successfully (${seconds}s)`;
     } catch (err) {
       message.textContent = "Failed to generate report. Please try again.";
     } finally {
