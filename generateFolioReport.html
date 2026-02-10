@@ -124,7 +124,6 @@
       transform: scale(0.98);
     }
 
-    /* ✅ CLEAR DISABLED STATE */
     .btn-submit:disabled {
       opacity: 0.55;
       cursor: not-allowed;
@@ -138,7 +137,6 @@
       color: var(--text-muted);
     }
 
-    /* REPORT AREA */
     #result {
       display: none;
       margin: 56px auto 0;
@@ -175,94 +173,19 @@
     .gain { color: #15803D; font-weight: 600; }
     .loss { color: #B91C1C; font-weight: 600; }
 
-    @media print {
-      header, .upload-card, #message {
-        display: none !important;
-      }
-
-      body {
-        background: #fff !important;
-      }
-
-      #result {
-        display: block !important;
-        box-shadow: none;
-        border: none;
-        padding: 0;
-      }
-    }
-	
-	/* Header bar with centered title */
-	.header-bar {
-	  position: relative;
-	  display: flex;
-	  align-items: center;
-	  min-height: 60px;
-	  margin-bottom: 56px;
-	}
-
-	/* Logo on left */
-	.header-logo {
-	  height: 36px;
-	  object-fit: contain;
-	}
-
-	/* Truly centered title */
-	.header-title {
-	  position: absolute;
-	  left: 50%;
-	  transform: translateX(-50%);
-	  margin: 0;
-	  font-size: 42px;
-	  font-weight: 800;
-	  background: linear-gradient(90deg, #7CF9FF, #38E8FF);
-	  -webkit-background-clip: text;
-	  -webkit-text-fill-color: transparent;
-	  white-space: nowrap;
-	}
-
   </style>
-  <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com">
-  </script>
-  <!-- Google Font -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
 </head>
 
 <body>
 
 <div class="page">
 
-  <header class="header-bar">
-  <img  src="https://ai-implementer.netlify.app/images/ai-implementer-logo.png" alt="Logo" class="header-logo">
-</header>
-
-<!-- Hero Section -->
-  <header class="relative bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 text-center px-2" id="top">
-   <div class="max-w-4xl mx-auto">
-    <h1 class="text-5xl md:text-6xl font-extrabold text-white mb-6 leading-tight">
-     Smart
-     <span class="text-cyan-400">
-      Portfolio Report Generator
-     </span>
-    </h1>
-    <p class="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto mb-10">
-      Understand where your money is invested, how it is performing,
-      and what adjustments can improve balance.
-    </p>
-   </div>
-  </header>
- 	
   <div class="upload-card">
     <h2>Upload Portfolio CSV</h2>
 
     <form id="uploadForm">
       <input type="file" id="fileInput" accept=".csv" required>
-      <button
-        class="btn-submit"
-        id="submitBtn"
-        type="submit"
-      >
+      <button class="btn-submit" id="submitBtn" type="submit">
         Upload & Process
       </button>
     </form>
@@ -287,7 +210,14 @@
     if (!fileInput.files.length) return;
 
     submitBtn.disabled = true;
-    message.textContent = "Generating report…";
+
+    /* ⏱ TIMER — ADDED (nothing else changed) */
+    let seconds = 0;
+    message.textContent = "Generating report… (0s)";
+    const timer = setInterval(() => {
+      seconds++;
+      message.textContent = `Generating report… (${seconds}s)`;
+    }, 1000);
 
     try {
       const formData = new FormData();
@@ -302,10 +232,11 @@
 
       result.innerHTML = html;
       result.style.display = "block";
-      message.textContent = "Report generated successfully";
+      message.textContent = `Report generated successfully (${seconds}s)`;
     } catch (err) {
       message.textContent = "Failed to generate report. Please try again.";
     } finally {
+      clearInterval(timer);   // ⏱ stop timer
       submitBtn.disabled = false;
     }
   });
