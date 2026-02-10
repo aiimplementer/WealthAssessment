@@ -2,83 +2,95 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>CSV Upload — Portfolio Report</title>
+  <title>Portfolio CSV Upload — Wealth Assessment</title>
 
   <style>
+    :root {
+      --bg-page: #F5F7FB;
+      --bg-card: #FFFFFF;
+      --text-main: #101828;
+      --text-muted: #667085;
+      --primary: #0052CC;
+      --border-soft: #E4E7EC;
+      --shadow-soft: 0 10px 24px rgba(16, 24, 40, 0.08);
+      --radius-lg: 16px;
+      --radius-md: 12px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #F7F9FB;
-      color: #1E1E2D;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-height: 100vh;
+      font-family: Inter, "Segoe UI", system-ui, sans-serif;
+      background: var(--bg-page);
+      color: var(--text-main);
+    }
+
+    /* Page container */
+    .page {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 48px 20px 80px;
     }
 
     header {
-      width: 100%;
-      padding: 40px 20px 10px;
       text-align: center;
-      background: #fff;
-      box-shadow: 0 1px 6px rgba(0,0,0,0.08);
+      margin-bottom: 48px;
     }
 
     header h1 {
-      margin: 0;
-      font-size: 28px;
+      font-size: 34px;
       font-weight: 700;
-      color: #0D1F44;
+      margin: 0;
     }
 
     header p {
-      margin-top: 8px;
-      font-size: 16px;
-      color: #475467;
+      margin-top: 10px;
+      font-size: 17px;
+      color: var(--text-muted);
     }
 
-    .card {
-      margin-top: 40px;
-      background: #fff;
-      padding: 30px;
-      width: 380px;
-      border-radius: 12px;
-      box-shadow: 0 8px 16px rgba(0,0,0,0.08);
+    /* Upload card */
+    .upload-card {
+      max-width: 420px;
+      margin: 0 auto;
+      background: var(--bg-card);
+      padding: 32px;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-soft);
+      border: 1px solid var(--border-soft);
     }
 
-    .card h2 {
-      margin: 0 0 18px;
-      font-size: 20px;
-      color: #0D1F44;
-    }
-
-    .input-group {
-      margin-bottom: 18px;
+    .upload-card h2 {
+      margin: 0 0 20px;
+      font-size: 22px;
     }
 
     input[type="file"] {
       width: 100%;
-      padding: 8px;
-      border: 1px solid #CBD5E1;
-      border-radius: 6px;
+      padding: 10px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-soft);
       font-size: 14px;
     }
 
     .btn-submit {
+      margin-top: 20px;
       width: 100%;
-      background: #0052CC;
+      padding: 14px;
+      background: var(--primary);
       color: #fff;
-      padding: 12px;
+      border: none;
+      border-radius: var(--radius-md);
       font-size: 16px;
       font-weight: 600;
-      border: none;
-      border-radius: 8px;
       cursor: pointer;
     }
 
     .btn-submit:disabled {
-      background: #9BB2E8;
+      opacity: 0.65;
       cursor: not-allowed;
     }
 
@@ -88,49 +100,71 @@
       text-align: center;
     }
 
+    /* Result section */
     #result {
-      width: 95%;
-      max-width: 1200px;
-      margin: 40px auto;
-      padding: 20px;
-      background: #ffffff;
-      border-radius: 12px;
-      box-shadow: 0 8px 18px rgba(0,0,0,0.08);
+      margin-top: 56px;
+      padding: 36px;
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-soft);
+      border: 1px solid var(--border-soft);
       display: none;
+    }
+
+    /* Make embedded report feel native */
+    #result * {
+      max-width: 100%;
+    }
+
+    @media (max-width: 768px) {
+      header h1 {
+        font-size: 28px;
+      }
+
+      .upload-card {
+        padding: 24px;
+      }
+
+      #result {
+        padding: 24px;
+      }
     }
   </style>
 </head>
 
 <body>
 
-<header>
-  <h1>Portfolio CSV Upload</h1>
-  <p>Upload your CSV report for analysis</p>
-</header>
+  <div class="page">
 
-<div class="card">
-  <h2>Select CSV (Max 1 MB)</h2>
+    <header>
+      <h1>Portfolio CSV Upload</h1>
+      <p>Upload your CSV file to generate a detailed wealth assessment</p>
+    </header>
 
-  <form id="uploadForm" novalidate>
-    <div class="input-group">
-      <input
-        type="file"
-        id="fileInput"
-        name="file"
-        accept=".csv,text/csv"
-        required
-      />
+    <div class="upload-card">
+      <h2>Upload Portfolio CSV</h2>
+
+      <form id="uploadForm" novalidate>
+        <input
+          type="file"
+          id="fileInput"
+          name="file"
+          accept=".csv,text/csv"
+          required
+        />
+
+        <button class="btn-submit" id="submitBtn" type="submit">
+          Upload & Process
+        </button>
+      </form>
+
+      <div id="message"></div>
     </div>
 
-    <button class="btn-submit" id="submitBtn" type="submit">
-      Upload & Process
-    </button>
-  </form>
+    <!-- Seamless report continuation -->
+    <div id="result"></div>
 
-  <div id="message"></div>
-</div>
-
-<div id="result"></div>
+  </div>
 
 <script>
   const form = document.getElementById("uploadForm");
@@ -151,27 +185,18 @@
 
     const file = fileInput.files[0];
 
-    /* ---------- Validation ---------- */
-
     if (!file) return showError("Please select a CSV file.");
-
     if (!file.name.toLowerCase().endsWith(".csv"))
-      return showError("Only .csv files are allowed.");
-
+      return showError("Only CSV files are allowed.");
     if (file.type && !ALLOWED_TYPES.includes(file.type))
       return showError("Invalid CSV file format.");
-
     if (file.size > MAX_SIZE)
       return showError("File size must be less than 1 MB.");
 
-    /* ---------- Processing UI ---------- */
-
     submitBtn.disabled = true;
     submitBtn.textContent = "Processing...";
-    message.style.color = "#475467";
-    message.textContent = "Processing… please wait";
-
-    /* ---------- Upload ---------- */
+    message.style.color = "#667085";
+    message.textContent = "Processing… generating your wealth report";
 
     const formData = new FormData();
     formData.append("file", file);
@@ -186,15 +211,17 @@
 
       const html = await response.text();
 
-      message.style.color = "#2E7D32";
-      message.textContent = "Report generated successfully";
+      message.style.color = "#027A48";
+      message.textContent = "Wealth assessment generated successfully";
 
       result.innerHTML = html;
       result.style.display = "block";
+      result.scrollIntoView({ behavior: "smooth" });
+
       form.reset();
 
     } catch {
-      showError("Network or server error occurred.");
+      showError("Unable to generate report. Please try again.");
     } finally {
       submitBtn.disabled = false;
       submitBtn.textContent = "Upload & Process";
@@ -202,7 +229,7 @@
   });
 
   function showError(text) {
-    message.style.color = "#D9345F";
+    message.style.color = "#D92D20";
     message.textContent = text;
     submitBtn.disabled = false;
     submitBtn.textContent = "Upload & Process";
