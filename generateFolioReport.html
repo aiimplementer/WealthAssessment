@@ -287,7 +287,14 @@
     if (!fileInput.files.length) return;
 
     submitBtn.disabled = true;
-    message.textContent = "Generating report…";
+
+    // ⏱ TIMER — added
+    let seconds = 0;
+    message.textContent = "Generating report… (0s)";
+    const timer = setInterval(() => {
+      seconds++;
+      message.textContent = `Generating report… (${seconds}s)`;
+    }, 1000);
 
     try {
       const formData = new FormData();
@@ -302,10 +309,11 @@
 
       result.innerHTML = html;
       result.style.display = "block";
-      message.textContent = "Report generated successfully";
+      message.textContent = `Report generated successfully (${seconds}s)`;
     } catch (err) {
       message.textContent = "Failed to generate report. Please try again.";
     } finally {
+      clearInterval(timer); // ⏱ stop timer
       submitBtn.disabled = false;
     }
   });
