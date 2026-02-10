@@ -297,6 +297,8 @@
     }, 1000);
 
     try {
+	  result.innerHTML = "";
+	
       const formData = new FormData();
       formData.append("file", fileInput.files[0]);
 
