@@ -290,11 +290,18 @@
 
     // ⏱ TIMER — added
     let seconds = 0;
-    message.textContent = "Generating report… (0s)";
-    const timer = setInterval(() => {
-      seconds++;
-      message.textContent = `Generating report… (${seconds}s)`;
-    }, 1000);
+	const timer = setInterval(() => {
+	  seconds++;
+
+	  const mins = Math.floor(seconds / 60);
+	  const secs = seconds % 60;
+
+	  message.textContent =
+		mins > 0
+		  ? `Generating report… (${mins}m ${secs}s)`
+		  : `Generating report… (${secs}s)`;
+	}, 1000);
+
 
     try {
 	  result.style.display = "none";
