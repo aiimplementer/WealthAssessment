@@ -2,9 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Portfolio CSV Upload — Wealth Assessment</title>
+  <title>Portfolio — Wealth Assessment</title>
 
   <style>
+ 
     :root {
       --bg-dark-1: #050B18;
       --bg-dark-2: #08142E;
@@ -43,7 +44,7 @@
     .page {
       max-width: 1200px;
       margin: 0 auto;
-      padding: 64px 20px 96px;
+      padding: 24px 20px 96px;
     }
 
     header {
@@ -70,7 +71,7 @@
     }
 
     .upload-card {
-      padding: 32px;
+      padding: 22px;
       background: var(--bg-card);
       backdrop-filter: blur(14px);
       border-radius: var(--radius-lg);
@@ -190,21 +191,68 @@
         padding: 0;
       }
     }
+	
+	/* Header bar with centered title */
+	.header-bar {
+	  position: relative;
+	  display: flex;
+	  align-items: center;
+	  min-height: 60px;
+	  margin-bottom: 56px;
+	}
+
+	/* Logo on left */
+	.header-logo {
+	  height: 36px;
+	  object-fit: contain;
+	}
+
+	/* Truly centered title */
+	.header-title {
+	  position: absolute;
+	  left: 50%;
+	  transform: translateX(-50%);
+	  margin: 0;
+	  font-size: 42px;
+	  font-weight: 800;
+	  background: linear-gradient(90deg, #7CF9FF, #38E8FF);
+	  -webkit-background-clip: text;
+	  -webkit-text-fill-color: transparent;
+	  white-space: nowrap;
+	}
+
   </style>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com">
+  </script>
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
 </head>
 
 <body>
 
 <div class="page">
 
-  <header>
-    <h1>Portfolio Report Generator</h1>
-    <p>
+  <header class="header-bar">
+  <img  src="https://ai-implementer.netlify.app/images/ai-implementer-logo.png" alt="Logo" class="header-logo">
+</header>
+
+<!-- Hero Section -->
+  <header class="relative bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 text-center px-2" id="top">
+   <div class="max-w-4xl mx-auto">
+    <h1 class="text-5xl md:text-6xl font-extrabold text-white mb-6 leading-tight">
+     Smart
+     <span class="text-cyan-400">
+      Portfolio Report Generator
+     </span>
+    </h1>
+    <p class="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto mb-10">
       Understand where your money is invested, how it is performing,
       and what adjustments can improve balance.
     </p>
+   </div>
   </header>
-
+ 	
   <div class="upload-card">
     <h2>Upload Portfolio CSV</h2>
 
