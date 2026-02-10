@@ -274,6 +274,27 @@
 
 </div>
 
+<footer class="footer-bar">
+  <div class="footer-status">
+    <div id="portfolioServiceStatus" class="status-item">
+      <span class="dot"></span>
+      <span>Wealth Check: Checking…</span>
+    </div>
+
+    <div id="mfapiStatus" class="status-item">
+      <span class="dot"></span>
+      <span>Service: Checking…</span>
+    </div>
+  </div>
+
+  <div>
+    Powered by
+    <a href="https://ai-implementer.netlify.app/" target="_blank">
+      AI-Implementer
+    </a>
+  </div>
+</footer>
+
 <script>
   const form = document.getElementById("uploadForm");
   const fileInput = document.getElementById("fileInput");
@@ -349,6 +370,49 @@
       submitBtn.disabled = false;
     }
   });
+  
+  async function checkPortfolioService(){
+  const el = document.getElementById("portfolioServiceStatus");
+  const dot = el.querySelector(".dot");
+  const text = el.querySelector("span:last-child");
+  dot.classList.remove("up","down");
+
+  try{
+    const res = await fetch(HEALTH_WEBHOOK,{cache:"no-store"});
+    if(!res.ok) throw 0;
+    dot.classList.add("up");
+    text.textContent="Wealth Check: Available";
+  }catch{
+    dot.classList.add("down");
+    text.textContent="Wealth Check: Unreachable";
+  }
+}
+
+async function checkMfapi(){
+  const el = document.getElementById("mfapiStatus");
+  const dot = el.querySelector(".dot");
+  const text = el.querySelector("span:last-child");
+  dot.classList.remove("up","down");
+
+  const controller=new AbortController();
+  const timeout=setTimeout(()=>controller.abort(),5000);
+
+  try{
+    const res=await fetch("https://api.mfapi.in/mf/120503",{signal:controller.signal});
+    clearTimeout(timeout);
+    const data=await res.json();
+    if(!data?.meta?.scheme_name) throw 0;
+    dot.classList.add("up");
+    text.textContent="Service: Available";
+  }catch{
+    clearTimeout(timeout);
+    dot.classList.add("down");
+    text.textContent="Service: Unreachable";
+  }
+}
+
+checkPortfolioService();
+checkMfapi();
 </script>
 
 </body>
