@@ -58,7 +58,6 @@
     }
 
     input[type="file"] {
-      display: block;
       width: 100%;
       padding: 8px;
       border: 1px solid #CBD5E1;
@@ -76,6 +75,11 @@
       border: none;
       border-radius: 8px;
       cursor: pointer;
+    }
+
+    .btn-submit:disabled {
+      background: #9BB2E8;
+      cursor: not-allowed;
     }
 
     #message {
@@ -118,7 +122,9 @@
       />
     </div>
 
-    <button class="btn-submit" type="submit">Upload & Process</button>
+    <button class="btn-submit" id="submitBtn" type="submit">
+      Upload & Process
+    </button>
   </form>
 
   <div id="message"></div>
@@ -129,14 +135,16 @@
 <script>
   const form = document.getElementById("uploadForm");
   const fileInput = document.getElementById("fileInput");
+  const submitBtn = document.getElementById("submitBtn");
   const message = document.getElementById("message");
   const result = document.getElementById("result");
 
-  const MAX_SIZE = 1 * 1024 * 1024; // 1 MB
+  const MAX_SIZE = 1 * 1024 * 1024;
   const ALLOWED_TYPES = ["text/csv", "application/vnd.ms-excel"];
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
+
     message.textContent = "";
     result.style.display = "none";
     result.innerHTML = "";
@@ -145,28 +153,23 @@
 
     /* ---------- Validation ---------- */
 
-    if (!file) {
-      showError("Please select a CSV file.");
-      return;
-    }
+    if (!file) return showError("Please select a CSV file.");
 
-    // Extension check
-    if (!file.name.toLowerCase().endsWith(".csv")) {
-      showError("Invalid file type. Only .csv files are allowed.");
-      return;
-    }
+    if (!file.name.toLowerCase().endsWith(".csv"))
+      return showError("Only .csv files are allowed.");
 
-    // MIME type check (best effort)
-    if (file.type && !ALLOWED_TYPES.includes(file.type)) {
-      showError("Invalid CSV file format.");
-      return;
-    }
+    if (file.type && !ALLOWED_TYPES.includes(file.type))
+      return showError("Invalid CSV file format.");
 
-    // Size check
-    if (file.size > MAX_SIZE) {
-      showError("File size must be less than 1 MB.");
-      return;
-    }
+    if (file.size > MAX_SIZE)
+      return showError("File size must be less than 1 MB.");
+
+    /* ---------- Processing UI ---------- */
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Processing...";
+    message.style.color = "#475467";
+    message.textContent = "Processing… please wait";
 
     /* ---------- Upload ---------- */
 
@@ -174,9 +177,6 @@
     formData.append("file", file);
 
     try {
-      message.style.color = "#475467";
-      message.textContent = "Processing… please wait";
-
       const response = await fetch(
         "https://unsparse-sherman-nonfallaciously.ngrok-free.dev/webhook/0ed95644-7a7f-4429-848e-06a44becdab0",
         { method: "POST", body: formData }
@@ -195,12 +195,17 @@
 
     } catch {
       showError("Network or server error occurred.");
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Upload & Process";
     }
   });
 
   function showError(text) {
     message.style.color = "#D9345F";
     message.textContent = text;
+    submitBtn.disabled = false;
+    submitBtn.textContent = "Upload & Process";
   }
 </script>
 
