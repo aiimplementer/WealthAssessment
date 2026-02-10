@@ -221,6 +221,57 @@
 	  white-space: nowrap;
 	}
 
+    /* Status Starts*/
+	/* ===== STATUS ===== */
+	.status{
+	  margin-top:16px;
+	  text-align:center;
+	  font-size:14px;
+	  min-height:22px;
+	}
+	.success{color:#22c55e}
+	.error{color:#ef4444}
+
+	/* ===== FOOTER ===== */
+	.footer-bar{
+	  display:flex;
+	  align-items:center;
+	  justify-content:space-between; /* LEFT ↔ RIGHT */
+	  gap:20px;
+	  padding:14px 20px;
+	  border-top:1px solid var(--border);
+	  font-size:13px;
+	  color:var(--text-muted);
+	}
+
+
+	.footer-status{
+	  display:flex;
+	  align-items:center;
+	  gap:22px;
+	}
+
+	.status-item{
+	  display:flex;
+	  align-items:center;
+	  gap:6px;
+	  white-space:nowrap;
+	}
+
+	.dot{
+	  width:8px;
+	  height:8px;
+	  border-radius:50%;
+	  background:#6b7280;
+	}
+	.dot.up{background:#22c55e}
+	.dot.down{background:#ef4444}
+
+	footer a{
+	  color:var(--accent);
+	  text-decoration:none;
+	}
+	/* Status Ends*/
   </style>
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com">
