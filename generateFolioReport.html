@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>CSV Upload — Portfolio Report</title>
+
+  <style>
+    /* Global / Page Layout */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #F7F9FB;
+      color: #1E1E2D;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    header {
+      width: 100%;
+      padding: 40px 20px 10px;
+      text-align: center;
+      background: #fff;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.08);
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 28px;
+      font-weight: 700;
+      color: #0D1F44;
+    }
+
+    header p {
+      margin-top: 8px;
+      font-size: 16px;
+      color: #475467;
+    }
+
+    /* Form Card */
+    .card {
+      margin-top: 40px;
+      background: #fff;
+      padding: 30px;
+      width: 380px;
+      border-radius: 12px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.08);
+    }
+
+    .card h2 {
+      margin: 0 0 18px;
+      font-size: 20px;
+      color: #0D1F44;
+    }
+
+    .input-group {
+      margin-bottom: 18px;
+    }
+
+    input[type="file"] {
+      display: block;
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #CBD5E1;
+      border-radius: 6px;
+      font-size: 14px;
+      color: #1E1E2D;
+    }
+
+    .btn-submit {
+      width: 100%;
+      background: #0052CC;
+      color: #fff;
+      padding: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .btn-submit:hover {
+      background: #003F9C;
+    }
+
+    #message {
+      margin-top: 14px;
+      font-size: 14px;
+      color: #D9345F;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <h1>Portfolio CSV Upload</h1>
+    <p>Upload your CSV report for analysis</p>
+  </header>
+
+  <div class="card">
+    <h2>Select CSV (Max 1 MB)</h2>
+
+    <form id="uploadForm">
+      <div class="input-group">
+        <input type="file" id="fileInput" name="file" accept=".csv" required />
+      </div>
+
+      <button class="btn-submit" type="submit">Upload & Process</button>
+    </form>
+
+    <div id="message"></div>
+  </div>
+
+  <script>
+    const form = document.getElementById("uploadForm");
+    const fileInput = document.getElementById("fileInput");
+    const message = document.getElementById("message");
+
+    const MAX_SIZE = 1 * 1024 * 1024;
+
+    form.addEventListener("submit", async function(e) {
+      e.preventDefault();
+      message.textContent = "";
+
+      const file = fileInput.files[0];
+      if (!file) {
+        message.textContent = "Please select a CSV file.";
+        return;
+      }
+
+      if (!file.name.toLowerCase().endsWith(".csv")) {
+        message.textContent = "Only CSV files are allowed.";
+        return;
+      }
+
+      if (file.size > MAX_SIZE) {
+        message.textContent = "Max file size is 1 MB.";
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append("file", file);
+
+      try {
+        const response = await fetch(
+          "https://unsparse-sherman-nonfallaciously.ngrok-free.dev/webhook/0ed95644-7a7f-4429-848e-06a44becdab0",
+          { method: "POST", body: formData }
+        );
+
+        if (response.ok) {
+          message.style.color = "#2E7D32";
+          message.textContent = "Upload successful!";
+          form.reset();
+        } else {
+          message.textContent = "Upload failed.";
+        }
+      } catch (err) {
+        message.textContent = "Network error occured.";
+      }
+    });
+  </script>
+
+</body>
+</html>
